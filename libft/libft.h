@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 15:18:03 by jgils             #+#    #+#             */
-/*   Updated: 2023/11/13 12:52:00 by jgils            ###   ########.fr       */
+/*   Updated: 2024/02/10 04:13:56 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
-char	*ft_strstr(const char *big, const char *little);
+char	*ft_strstr(char *big, char *little);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));

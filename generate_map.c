@@ -1,10 +1,6 @@
 #include "libft/libft.h"
 #include "fdf.h"
 
-// arquivo existe ================ foi
-// eh .fdf ======================= foi
-// se todas as linhas tem a mesma quantidade de numeros
-
 int	gnl_len(char *file)
 {
 	int	fd;
@@ -93,17 +89,4 @@ t_map	*generate_map(char *file)
 		count++;
 	}
 	return (map);
-}
-
-int	validate(char *file)
-{
-	int	fd;
-
-	if (ft_strstr(file, ".fdf") == NULL)
-		return (0);
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		return (0);
-	close(fd);
-	return (1);
 }
