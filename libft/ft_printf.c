@@ -14,9 +14,9 @@
 
 static int	ft_putptr(unsigned long arg, int base, char *set)
 {
+	int		count;
+	int		i;
 	char	str[16];
-	int	count;
-	int	i;
 
 	i = -1;
 	count = 0;
@@ -36,12 +36,12 @@ static int	ft_putptr(unsigned long arg, int base, char *set)
 	return (count);
 }
 
-static int	ft_putnbr(long arg, int base, char *set,  int u)
+static int	ft_putnbr(long arg, int base, char *set, int u)
 {
-	int	sig;
-	char	str[16];
+	int			i;
+	int			sig;
+	char		str[16];
 	unsigned int	nb;
-	int	i;
 
 	i = -1;
 	sig = 0;
@@ -50,7 +50,7 @@ static int	ft_putnbr(long arg, int base, char *set,  int u)
 	if (arg < 0 && !u)
 	{
 		arg *= -1;
-        	sig++;
+		sig++;
 	}
 	nb = arg;
 	while (nb != 0)
@@ -73,17 +73,19 @@ static int	ft_putstr(char *arg)
 	if (!arg)
 		return (write(1, "(null)", 6));
 	else
+	{
 		while (arg[i])
 		{
 			write(1, &arg[i], 1);
 			i++;
 		}
+	}
 	return (i);
 }
 
 static int	ft_checkspec(va_list args, char spec)
 {
-	int	count;
+	int		count;
 	char	c;
 
 	count = 0;
@@ -108,17 +110,17 @@ static int	ft_checkspec(va_list args, char spec)
 		count = write(1, "%", 1);
 	return (count);
 }
-  
+
 int	ft_printf(const char *str, ...)
 {
-	int	i;
-	int	count;
+	int		i;
+	int		count;
 	va_list	args;
 
 	i = 0;
 	count = 0;
 	va_start(args, str);
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] == '%')
 			count += ft_checkspec(args, str[++i]);

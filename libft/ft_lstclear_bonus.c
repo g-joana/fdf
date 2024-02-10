@@ -15,7 +15,7 @@
 void	ft_lstclear(t_list **lst, void (*del)(void*))
 {
 	t_list	*nxtnode;
-	
+
 	while (*lst)
 	{
 		nxtnode = (*lst)->next;
