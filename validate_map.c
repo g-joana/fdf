@@ -99,7 +99,7 @@ int	validate(char *file)
 {
 	int	fd;
 
-	if (ft_strnstr(file, ".fdf", 4) == NULL)
+	if (ft_strstr(file, ".fdf") == NULL)
 		return (0);
 	fd = open(file, O_RDONLY);
 	if (fd < 0)

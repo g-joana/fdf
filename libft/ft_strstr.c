@@ -16,7 +16,6 @@ char	*ft_strstr(const char *big, const char *little)
 {
 	size_t	ibig;
 	size_t	ilit;
-	char	*str;
 
 	if (!(ft_strlen(little)) || big == little)
 		return ((char *) big);
@@ -32,7 +31,7 @@ char	*ft_strstr(const char *big, const char *little)
 				&& (big[ibig + ilit] == little[ilit]))
 				ilit++;
 			if (little[ilit++] == '\0')
-				return (str);
+				return (&big[ibig]);
 		}
 		ibig++;
 	}
