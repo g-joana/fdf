@@ -20,7 +20,7 @@ int	main(void)
 
 	mlx = mlx_init();
 
-	mlx_win = mlx_new_window(mlx, 900, 600, "Hello world!");
+	mlx_win = mlx_new_window(mlx, 900, 600, "foda dog!");
 	img.img = mlx_new_image(mlx, 900, 600);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	
@@ -30,7 +30,7 @@ int	main(void)
 	{
 		my_mlx_pixel_put(&img, x, y, 0x00FF0000);
 		x++;
-		y++;
+		//y++;
 	}
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);

@@ -33,7 +33,7 @@ int	validate(char *file)
 	close(fd);
 	return (1);
 }
-
+/*
 int	main(int argc, char **argv)
 {
 	t_map	*map;
@@ -49,3 +49,4 @@ int	main(int argc, char **argv)
 	(void)map;
 	return (0);
 }
+*/
