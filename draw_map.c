@@ -4,19 +4,32 @@
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
-	char	*dst;
+	char	*dest;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	dest = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	*(unsigned int*)dest = color;
 }
 
-void	draw_wires(t_map map)
+int	edge_resize()
+{}
+
+void	view_fullsize()
+{}
+
+t_vertices 	set_vertices(t_map map)
 {
-	t_map	map;
+aaaaaaaaaaaaaaaaaaaaaa
+
+}
+
+void	render(t_map map)
+{
 	int	x;
 	int	y;
 	int	col;
 	int	lin;
+	int	countx;
+	int	county;
 
 	x = 450; //start
 	y = 800;
@@ -24,15 +37,15 @@ void	draw_wires(t_map map)
 	col = 0;
 	lin = 0;
 	// 
-	while (x <= (map->xlen * BLOCK_SIZE))
+	while (countx <= (map->xlen * EDGE_SIZE))
 	{
 		x++;
 		y++;
-		my_mlx_pixel_put(&img, x, y, 0x00FF0000);
-		if (x / col == BLOCK_SIZE)
+		my_mlx_pixel_put(&img, WIN_WIDTH, WIN_WIDTH, 0x00FF0000);
+		if (x / col == EDGE_SIZE)
 		while (
 			my_mlx_pixel_put(&img, x, y, 0x00FF0000);
-		col += BLOCK_SIZE;
+		col += EDGE_SIZE;
 	}
 	while (
 }
@@ -52,6 +65,7 @@ int	main(void)
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	
 	map = generate_map("");
+	/*
 	y = 100;
 	x = 100;
 	while (x <= 400 && x <= 800)
@@ -60,6 +74,8 @@ int	main(void)
 		x++;
 		//y++;
 	}
+	*/
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 }
+*/

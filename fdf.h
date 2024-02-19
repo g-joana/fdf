@@ -2,8 +2,16 @@
 #include "minilibx-linux/mlx_int.h"
 #include "libft/libft.h"
 
-#ifndef BLOCK_SIZE
-# define BLOCK_SIZE 20;
+#ifndef EDGE_SIZE
+# define EDGE_SIZE 42;
+#endif
+
+#ifndef WIN_WIDTH
+# define WIN_WIDTH 500;
+#endif
+
+#ifndef WIN_HEIGHT
+# define WIN_HEIGHT 500;
 #endif
 
 typedef struct	s_map {
@@ -11,6 +19,13 @@ typedef struct	s_map {
 	int	ylen;
 	int	**z;
 }	t_map;
+
+typedef struct	s_vertices {
+	int	xlen;
+	int	ylen;
+	int	***z;
+}	t_vertices;
+
 
 typedef struct	s_data {
 	void	*img;

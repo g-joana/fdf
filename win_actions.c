@@ -1,5 +1,5 @@
 #include "fdf.h"
-
+/*
 int	render_next_frame(void *YourStruct); w w
 
 void	open_win(int h, int w)
@@ -16,3 +16,4 @@ void	open_win(int h, int w)
 	mlx_loop(mlx);
 	(void) mlx_win;
 }
+*/
