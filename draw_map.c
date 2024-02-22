@@ -10,46 +10,112 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dest = color;
 }
 
-int	edge_resize()
-{}
 
-void	view_fullsize()
-{}
 
-t_vertices 	set_vertices(t_map map)
+
+void	get_map_size(t_fdf fdf, t_map map)
 {
-aaaaaaaaaaaaaaaaaaaaaa
+	int	count;
+	int	lines;
+
+	count = 0;
+	lines = fdf.rows;
+	fdf.highest_vol = 0;
+	fdf.lowest_vol = 0;
+
+	while (lines > 0)
+	{
+		//conta pra achar altura do volume
+
+		if (map.z[count] > fdf.highest_vol)
+			fdf.highest_vol = map.z[count];
+		if (map.z[count] < fdf.lowest_vol)
+			fdf.lowest_vol = map.z[count];
+		count++;
+		lines--;
+		if (count == fdf.columns)
+			count = 0;
+	}
+	
+	fdf.map_len[0] = fdf.columns * fdf.rows;
+	fdf.map_len[1] = fdf.highest_vol - fdf.lowest_vol;
+}
+
+void 	set_vertices(t_fdf fdf)
+{
+
+
+	fdf.start_vertice[0] = 0;
+	fdf.start_vertice[1] = WIN_HEIGHT
 
 }
 
-void	render(t_map map)
+void	set_dots(t_fdf fdf)
+{
+	int	row;
+	int	column;
+
+	row = 0;
+	
+	//calcular a partir dos vertices, as distâncias!
+	while (row < fdf.rows)
+	{
+		column = 0;
+		while (column < fdf.columns)
+		{
+			fdf.dots[row][0] = 
+			fdf.dots[row
+		}
+		row++; 
+
+
+
+}
+
+
+
+void	render_base_line(t_fdf fdf, t_data img)
 {
 	int	x;
 	int	y;
-	int	col;
-	int	lin;
-	int	countx;
-	int	county;
+	int	line;
+	int	select;
+	int	dots;
 
 	x = 450; //start
 	y = 800;
 
-	col = 0;
-	lin = 0;
-	// 
-	while (countx <= (map->xlen * EDGE_SIZE))
+	while (line < fdf.rows)
+	{
+		select = 0;
+		x = fdf.dots[select][0];
+		y = fdf.dots[select][1];
+		select = fdf.columns - 1;
+		if (x > fdf.dots[select][0] && y > fdf.dots[select][0])
+		while (x <= fdf.dots[select][0] && y >= fdf.dots[select][1])
+		{
+			
+		}
+		line++;
+	}
+	
+	
+	
+
+
+
+	while (countx <= (fdf.columns * fdf.edge_size))
 	{
 		x++;
 		y++;
-		my_mlx_pixel_put(&img, WIN_WIDTH, WIN_WIDTH, 0x00FF0000);
+		my_mlx_pixel_put(&img, x, y, 0x00FF0000);
 		if (x / col == EDGE_SIZE)
-		while (
+		while ()
 			my_mlx_pixel_put(&img, x, y, 0x00FF0000);
 		col += EDGE_SIZE;
 	}
-	while (
 }
-
+/*
 int	main(void)
 {
 	int	y;
@@ -64,17 +130,15 @@ int	main(void)
 	img.img = mlx_new_image(mlx, 900, 600);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	
-	map = generate_map("");
-	/*
+	generate_map(map);
 	y = 100;
 	x = 100;
-	while (x <= 400 && x <= 800)
+	while (x <= 400 && y <= 400)
 	{
 		my_mlx_pixel_put(&img, x, y, 0x00FF0000);
 		x++;
-		//y++;
+		y++;
 	}
-	*/
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 }

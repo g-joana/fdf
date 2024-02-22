@@ -15,16 +15,25 @@
 #endif
 
 typedef struct	s_map {
-	int	xlen;
-	int	ylen;
-	int	**z;
+	int	columns;
+	int	lines;
+	int	*z;
 }	t_map;
 
-typedef struct	s_vertices {
-	int	xlen;
-	int	ylen;
-	int	***z;
-}	t_vertices;
+typedef struct	s_fdf {
+	int	columns;
+	int	rows;
+	int	**dots;
+
+	int	*start_vertice;
+	//int	*end_vertice;
+
+	int	lowest_vol;
+	int	highest_vol;
+	int	*map_len;
+
+	int	edge_size;
+}	t_fdf;
 
 
 typedef struct	s_data {
