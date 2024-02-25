@@ -3,34 +3,40 @@
 #include "libft/libft.h"
 
 #ifndef EDGE_SIZE
-# define EDGE_SIZE 42;
+# define EDGE_SIZE 42
 #endif
 
 #ifndef WIN_WIDTH
-# define WIN_WIDTH 500;
+# define WIN_WIDTH 500
 #endif
 
 #ifndef WIN_HEIGHT
-# define WIN_HEIGHT 500;
+# define WIN_HEIGHT 500
 #endif
+
+typedef struct	s_dot {
+	int	x;
+	int	y;
+}	t_dot;
 
 typedef struct	s_map {
 	int	columns;
-	int	lines;
-	int	*z;
+	int	rows;
+	int	**z;
 }	t_map;
 
 typedef struct	s_fdf {
 	int	columns;
 	int	rows;
-	int	**dots;
+	int	**z;
+	t_dot	**dots;
 
-	int	*start_vertice;
+	//int	*start_vertice;
 	//int	*end_vertice;
 
-	int	lowest_vol;
-	int	highest_vol;
-	int	*map_len;
+	//int	lowest_vol;
+	//int	highest_vol;
+	int	map_len;
 
 	int	edge_size;
 }	t_fdf;

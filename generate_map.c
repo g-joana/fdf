@@ -77,13 +77,13 @@ t_map	*generate_map(char *file)
 
 	count = 0;
 	map = (t_map *)malloc(1 * sizeof(t_map));
-	map->xlen = count_tab(file);
+	map->rows = count_tab(file);
 	fd = open(file, O_RDONLY);
-	map->ylen = gnl_len(file);
-	map->z = (int **)malloc(map->ylen * sizeof(int *));
-	while (count < map->ylen)
+	map->columns = gnl_len(file);
+	map->z = (int **)malloc(map->columns * sizeof(int *));
+	while (count < map->columns)
 	{
-		map->z[count] = tab_atoi(ft_split(get_next_line(fd), ' '), map->xlen);
+		map->z[count] = tab_atoi(ft_split(get_next_line(fd), ' '), map->rows);
 		if (map->z[count] == 0)
 		{
 			ft_printf("%s\n", "Found wrong line length. Exiting.");
