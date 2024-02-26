@@ -13,7 +13,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 // 
 // 
 
-t_fdf	count_map_len(t_fdf fdf, t_map map)
+t_fdf	get_map_height(t_fdf fdf, t_map map)
 {
 	int	y;
 	int	x;
@@ -43,7 +43,7 @@ t_fdf	count_map_len(t_fdf fdf, t_map map)
 }
 
 /*
-t_fdf	*calculate_edge_size(t_fdf *fdf)
+t_fdf	*get_edge_size(t_fdf *fdf)
 {
 	fdf->map_height
 }
@@ -106,6 +106,7 @@ double	get_proportion(int distance1, int distance2)
 
 	if (distance1 > distance2)
 		proportion = ((double)distance1 / (double)distance2);
+		// / pelo > divisor comum?
 	else
 		proportion = 1;
 	return (proportion * negative);
@@ -129,6 +130,7 @@ void	render_line(t_data *img,int x, int next_x, int y, int next_y)
 		my_mlx_pixel_put(img, x, y, 0x00FF0000);
 		x += x_steps;
 		y += y_steps;
+
 	}
 }
 
@@ -210,7 +212,7 @@ int	main(void)
 	// 	my_mlx_pixel_put(&img, x, y, 0x00FF0000);
 	// 	x++;
 	// 	y++;
-	render_line(&img, 100, 0, 600, 100);
+	render_line(&img, 100, 0, 20, 10);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 }
