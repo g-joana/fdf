@@ -7,11 +7,11 @@
 #endif
 
 #ifndef WIN_WIDTH
-# define WIN_WIDTH 500
+# define WIN_WIDTH 900
 #endif
 
 #ifndef WIN_HEIGHT
-# define WIN_HEIGHT 500
+# define WIN_HEIGHT 600
 #endif
 
 typedef struct	s_dot {
@@ -36,7 +36,7 @@ typedef struct	s_fdf {
 
 	//int	lowest_vol;
 	//int	highest_vol;
-	int	map_len;
+	int	map_height;
 
 	int	edge_size;
 }	t_fdf;
