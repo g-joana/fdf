@@ -112,7 +112,7 @@ double	get_proportion(int distance1, int distance2)
 	return (proportion * negative);
 }
 
-void	render_line(t_data *img,int x, int next_x, int y, int next_y)
+void	render_line(t_data *img, double x, double next_x, double y, double next_y)
 {
 	int	x_distance;
 	int	y_distance;
@@ -212,7 +212,7 @@ int	main(void)
 	// 	my_mlx_pixel_put(&img, x, y, 0x00FF0000);
 	// 	x++;
 	// 	y++;
-	render_line(&img, 100, 0, 20, 10);
+	render_line(&img, 0, WIN_WIDTH, 0, 50);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 }
