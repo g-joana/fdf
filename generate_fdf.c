@@ -79,7 +79,7 @@ void	set_dots(t_fdf *fdf) // (coloca os pontos da base)
 	}
 	set_dots_volume(fdf);
 }
-
+/*
 double	get_proportion(int distance1, int distance2)
 {
 	double	proportion;
@@ -105,6 +105,38 @@ double	get_proportion(int distance1, int distance2)
 
 
 	if (distance1 > distance2)
+		proportion = ((double)distance1 / (double)distance2);
+		// / pelo > divisor comum?
+	else
+		proportion = 1;
+	return (proportion * negative);
+}
+*/
+double	get_proportion(int distance1, int distance2)
+{
+	double	proportion;
+	int	negative;
+
+	negative = 1;
+	if (distance1 < 0)
+	{
+		distance1 *= -1;
+		negative = -1;
+	}
+	if (distance2 < 0)
+		distance2 *= -1;
+
+	
+
+	if (distance1 == 0)
+		return (0);
+	if (distance2 == 0)
+		return (1 * negative);
+
+
+
+
+	if (distance1 < distance2)
 		proportion = ((double)distance1 / (double)distance2);
 		// / pelo > divisor comum?
 	else
@@ -200,7 +232,7 @@ int	main(void)
 
 	mlx = mlx_init();
 
-	mlx_win = mlx_new_window(mlx, WIN_WIDTH, WIN_HEIGHT, "foda dog");
+	mlx_win = mlx_new_window(mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
 	img.img = mlx_new_image(mlx, WIN_WIDTH, WIN_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	
@@ -212,7 +244,7 @@ int	main(void)
 	// 	my_mlx_pixel_put(&img, x, y, 0x00FF0000);
 	// 	x++;
 	// 	y++;
-	render_line(&img, 0, WIN_WIDTH, 0, 50);
+	render_line(&img, WIN_WIDTH, 0, WIN_HEIGHT, 0);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 }
