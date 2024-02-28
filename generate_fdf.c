@@ -10,9 +10,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dest = color;
 }
 
-// 
-// 
-
+//	a partir dos dados do mapa, calcula o tamanho da altura (em quantidade de pontos)
 t_fdf	get_map_height(t_fdf fdf, t_map map)
 {
 	int	y;
@@ -29,6 +27,7 @@ t_fdf	get_map_height(t_fdf fdf, t_map map)
 		y = 0;
 		while (y < map.columns)
 		{
+			// TEST: não sei se essa conta ta certa
 			vol = (map.rows - (x - y) + map.z[x][y]) + (map.columns - y);
 			if (vol > highest_vol)
 				highest_vol = map.z[x][y];
@@ -38,48 +37,67 @@ t_fdf	get_map_height(t_fdf fdf, t_map map)
 		}
 		x++;
 	}
+	// preciso passar fdf de parâmetro?
 	fdf.map_height = highest_vol - lowest_vol;
 	return(fdf);
 }
 
-/*
-t_fdf	*get_edge_size(t_fdf *fdf)
+//	a partir do tamanho da altura e largura do mapa (em pontos) e altura e largura da janela (em px), calcula o espaçamento entre os pontos (em px)
+int	get_edge_size(t_fdf fdf)
 {
-	fdf->map_height
-}
-*/
-void 	set_dots_volume(t_fdf *fdf)
-{
+	int	map_width;
+	// int	map_height;
+	int	edge_size;
+
+	map_width = fdf.columns + fdf.rows;
+	// map_height = fdf.map_height;
+
+	if (map_width > fdf.map_height)
+		edge_size = map_width / WIN_WIDTH;
+	else
+		edge_size = fdf.map_height / WIN_HEIGHT;
+	return (edge_size);
 }
 
-void	set_dots(t_fdf *fdf) // (coloca os pontos da base)
+void 	set_dots_volume(t_fdf *fdf, double edge)
 {
-	// precisa do edge size
-	int	start;
+	(void) fdf, (void) edge;
+	return ;
+}
+
+//	a partir do edge_size e do mapa, define o par ordenado de cada ponto do fdf
+void	set_dots(t_fdf *fdf)
+{
+	double	edge;
+	// int	start;
 	int	row;
 	int	col;
 
-	fdf->edge_size = // IMPORTANTE !! PENSAR EM COMO CALCULAR ESSE
+	edge = get_edge_size(*fdf);
+	// start = (WIN_WIDTH - (fdf->columns + fdf->rows * (edge / 2)) / 2);
+	//map_width = fdf->columns + fdf->rows;
+
 	row = 0;
 	col = 0;
 	//start
 	fdf->dots[row][col].x = 0;
-	fdf->dots[row][col].y = WIN_HEIGHT - (fdf->columns * (fdf->edge_size / 2));
+	fdf->dots[row][col].y = WIN_HEIGHT - (fdf->columns * (edge / 2));
 	while (row++ < fdf->rows)
 	{
 		while (col++ < fdf->columns)
 		{
-			fdf->dots[row][col].x = fdf->dots[row][col - 1].x + 1 * (fdf->edge_size / 2);
-			fdf->dots[row][col].y = fdf->dots[row][col - 1].y - 1 * (fdf->edge_size / 2);
+			fdf->dots[row][col].x = fdf->dots[row][col - 1].x + (edge / 2);
+			fdf->dots[row][col].y = fdf->dots[row][col - 1].y - (edge / 2);
 		}
 		col = 0;
-		fdf->dots[row][col].x = fdf->dots[row - 1][col].x + 1 * (fdf->edge_size / 2);
-		fdf->dots[row][col].y = fdf->dots[row - 1][col].y + 1 * (fdf->edge_size / 2);
+		fdf->dots[row][col].x = fdf->dots[row - 1][col].x + (edge / 2);
+		fdf->dots[row][col].y = fdf->dots[row - 1][col].y + (edge / 2);
 
 	}
-	set_dots_volume(fdf);
+	set_dots_volume(fdf, edge);
 }
-/*
+
+//	a partir da distância entre um ponto e outro de cada eixo, calcula e retorna o tamanho a ser incrementado no valor inicial para fazer essa linha;
 double	get_proportion(int distance1, int distance2)
 {
 	double	proportion;
@@ -94,51 +112,17 @@ double	get_proportion(int distance1, int distance2)
 	if (distance2 < 0)
 		distance2 *= -1;
 
-	
+
 
 	if (distance1 == 0)
 		return (0);
 	if (distance2 == 0)
 		return (1 * negative);
-
-
-
-
-	if (distance1 > distance2)
-		proportion = ((double)distance1 / (double)distance2);
-		// / pelo > divisor comum?
-	else
-		proportion = 1;
-	return (proportion * negative);
-}
-*/
-double	get_proportion(int distance1, int distance2)
-{
-	double	proportion;
-	int	negative;
-
-	negative = 1;
-	if (distance1 < 0)
-	{
-		distance1 *= -1;
-		negative = -1;
-	}
-	if (distance2 < 0)
-		distance2 *= -1;
-
-	
-
-	if (distance1 == 0)
-		return (0);
-	if (distance2 == 0)
-		return (1 * negative);
-
 
 
 
 	if (distance1 < distance2)
 		proportion = ((double)distance1 / (double)distance2);
-		// / pelo > divisor comum?
 	else
 		proportion = 1;
 	return (proportion * negative);
@@ -159,76 +143,32 @@ void	render_line(t_data *img, double x, double next_x, double y, double next_y)
 	//
 	while ((x != next_x || y != next_y) && x >= 0 && x <= WIN_WIDTH && y >= 0 && y <= WIN_HEIGHT)
 	{
-		my_mlx_pixel_put(img, x, y, 0x00FF0000);
+		my_mlx_pixel_put(img, x, y, 0xFF79C6);
 		x += x_steps;
 		y += y_steps;
 
 	}
 }
-
-// t_fdf	*generate_fdf(t_map map)
-// {
-// 	t_fdf	*fdf;
-//
-// 	fdf = (t_fdf *)malloc(1 * sizeof(t_fdf));
-// 	count_map_len(fdf, map); //precisa de dots
-// 	calculate_edge_size(fdf);
-// 	set_dots(fdf); // precisa de edge_size
-// 	render_fdf(fdf);
-// 	return (fdf);
-// }
-
 /*
-void	render_base_line(t_fdf fdf, t_data img)
+t_fdf	*generate_fdf(t_map map)
 {
-	int	x;
-	int	y;
-	int	line;
-	int	select;
-	int	dots;
+	t_fdf	*fdf;
 
-	x = 450; //start
-	y = 800;
-
-	while (line < fdf.rows)
-	{
-		select = 0;
-		x = fdf.dots[select][0];
-		y = fdf.dots[select][1];
-		select = fdf.columns - 1;
-		if (x > fdf.dots[select][0] && y > fdf.dots[select][0])
-		while (x <= fdf.dots[select][0] && y >= fdf.dots[select][1])
-		{
-			
-		}
-		line++;
-	}
-	
-	
-	
-
-
-
-	while (countx <= (fdf.columns * fdf.edge_size))
-	{
-		x++;
-		y++;
-		my_mlx_pixel_put(&img, x, y, 0x00FF0000);
-		if (x / col == EDGE_SIZE)
-		while ()
-			my_mlx_pixel_put(&img, x, y, 0x00FF0000);
-		col += EDGE_SIZE;
-	}
+	fdf = (t_fdf *)malloc(1 * sizeof(t_fdf));
+ 	calculate_edge_size(fdf);
+ 	set_dots(fdf); // precisa de edge_size
+ 	render_fdf(fdf);
+ 	return (fdf);
 }
-*/
+
 int	main(void)
 {
-	int	y;
-	int	x;
+	//int	y;
+	// int	x;
 	void	*mlx;
 	void	*mlx_win;
 	t_data	img;
-	t_map map;
+	// t_map map;
 
 	mlx = mlx_init();
 
@@ -244,7 +184,8 @@ int	main(void)
 	// 	my_mlx_pixel_put(&img, x, y, 0x00FF0000);
 	// 	x++;
 	// 	y++;
-	render_line(&img, WIN_WIDTH, 0, WIN_HEIGHT, 0);
+	render_line(&img, 0, WIN_WIDTH, 0, WIN_HEIGHT);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 }
+*/

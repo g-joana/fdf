@@ -86,10 +86,11 @@ t_map	*generate_map(char *file)
 		map->z[count] = tab_atoi(ft_split(get_next_line(fd), ' '), map->rows);
 		if (map->z[count] == 0)
 		{
-			ft_printf("%s\n", "Found wrong line length. Exiting.");
-			return (free(map), free(map->z), NULL);
+			printf("%s\n", "Found wrong line length. Exiting.");
+			return (NULL);
 		}
 		count++;
 	}
+	close(fd);
 	return (map);
 }

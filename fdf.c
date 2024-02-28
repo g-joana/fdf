@@ -1,5 +1,5 @@
 #include "fdf.h"
-//#include "libft/libft.h"
+#include "libft/libft.h"
 #include "stdio.h"
 
 void	print_tab(t_map *map)
@@ -8,10 +8,10 @@ void	print_tab(t_map *map)
 	int	count2;
 
 	count = 0;
-	while(count < map->ylen)
+	while(count < map->columns)
 	{
 		count2 = 0;
-		while(count2 < map->xlen)
+		while(count2 < map->rows)
 		{
 			printf("%i ", map->z[count][count2]);
 			count2++;
@@ -43,8 +43,10 @@ int	main(int argc, char **argv)
 		if (validate(argv[1]) == 0)
 		 	return (1);
 		map = generate_map(argv[1]);
-		open_win(500, 500);
-		//print_tab(map);
+		if (map == NULL)
+			return (1);
+		print_tab(map);
+		generate_fdf(map);
 	}
 	(void)map;
 	return (0);
