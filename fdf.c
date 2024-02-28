@@ -33,7 +33,7 @@ int	validate(char *file)
 	close(fd);
 	return (1);
 }
-
+/*
 int	main(int argc, char **argv)
 {
 	t_map	*map;
@@ -46,8 +46,9 @@ int	main(int argc, char **argv)
 		if (map == NULL)
 			return (1);
 		print_tab(map);
-		generate_fdf(map);
+	//	generate_fdf(map);
 	}
 	(void)map;
 	return (0);
 }
+*/

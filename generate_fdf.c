@@ -1,7 +1,5 @@
 #include "fdf.h"
 
-// offset -> diferenca de espaco
-
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dest;
@@ -73,7 +71,8 @@ void	set_dots(t_fdf *fdf)
 	int	row;
 	int	col;
 
-	edge = get_edge_size(*fdf);
+	edge = 20;
+	//edge = get_edge_size(*fdf);
 	// start = (WIN_WIDTH - (fdf->columns + fdf->rows * (edge / 2)) / 2);
 	//map_width = fdf->columns + fdf->rows;
 
@@ -128,7 +127,7 @@ double	get_proportion(int distance1, int distance2)
 	return (proportion * negative);
 }
 
-void	render_line(t_data *img, double x, double next_x, double y, double next_y)
+void	render_line(t_data *img, double x, double y, double next_x, double next_y)
 {
 	int	x_distance;
 	int	y_distance;
@@ -150,17 +149,32 @@ void	render_line(t_data *img, double x, double next_x, double y, double next_y)
 	}
 }
 /*
-t_fdf	*generate_fdf(t_map map)
+void	render_fdf(t_data *img, t_fdf *fdf)
 {
-	t_fdf	*fdf;
+	int	dots;
+	int	count;
+	int	start;
+	int	end;
 
-	fdf = (t_fdf *)malloc(1 * sizeof(t_fdf));
- 	calculate_edge_size(fdf);
- 	set_dots(fdf); // precisa de edge_size
- 	render_fdf(fdf);
- 	return (fdf);
+	dots = fdf->rows * fdf->columns;
+	while (count < dots)
+	{
+		start = count;
+		end = count + fdf->columns;
+		render_line(img, fdf->dots[start], fdf->dots[end]);
+		count = end++;
+	}
+	count = 0;
+	while (count < dots)
+	{
+		start = count;
+		end = count + (fdf->columns * (fdf->rows - 1));
+		render_line(img, fdf->dots[start], fdf->dots[end]);
+		count = end++;
+	}
+
 }
-
+*/
 int	main(void)
 {
 	//int	y;
@@ -184,8 +198,7 @@ int	main(void)
 	// 	my_mlx_pixel_put(&img, x, y, 0x00FF0000);
 	// 	x++;
 	// 	y++;
-	render_line(&img, 0, WIN_WIDTH, 0, WIN_HEIGHT);
+	render_line(&img, 20, 200, 20, 20);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 }
-*/
