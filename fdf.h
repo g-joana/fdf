@@ -15,8 +15,8 @@
 #endif
 
 typedef struct	s_dot {
-	int	x;
-	int	y;
+	double	x;
+	double	y;
 }	t_dot;
 
 typedef struct	s_map {
