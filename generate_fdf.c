@@ -1,5 +1,24 @@
 #include "fdf.h"
 
+void print_dots(t_fdf *fdf)
+{
+	int	count1;
+	int	count2;
+
+	count1 = 0;
+	while (count1 < fdf->rows)
+	{
+		count2 = 0;
+		while (count2 < fdf->columns)
+		{
+			printf("dot.x: %f | dot.y: %f\n", fdf->dots[count1][count2].x, fdf->dots[count1][count2].y);
+			count2++;
+		}
+		printf("\n");
+		count1++;
+	}
+}
+
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dest;
@@ -89,34 +108,36 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 	//start
 	dots[row][col].x = 0;
 	dots[row][col].y = WIN_HEIGHT - (fdf.rows * (edge / 2));
-	printf("fdf.rows: %i\n", fdf.rows);
-	printf("fdf.columns: %i\n", fdf.columns);
-	printf("edge: %f\n", edge);
-	printf("dots[row][col].x: %f\n", dots[row][col].x);
-	printf("dots[row][col].y: %f\n", dots[row][col].y);
+	// printf("fdf.rows: %i\n", fdf.rows);
+	// printf("fdf.columns: %i\n", fdf.columns);
+	// printf("edge: %f\n", edge);
+	// printf("dots[row][col].x: %f\n", dots[row][col].x);
+	// printf("dots[row][col].y: %f\n", dots[row][col].y);
 	printf("\n\n");
 	col++;
 	while (row < fdf.rows)
 	{
+		if (row > 0)
+		{
+			col = 0;
+			dots[row][col].x = dots[row - 1][col].x + (edge / 2);
+			dots[row][col].y = dots[row - 1][col].y + (edge / 2);
+			//printf("new row dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
+			//printf("new row dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
+			col++;
+		}
 		while (col < fdf.columns)
 		{
 			dots[row][col].x = dots[row][col - 1].x + (edge / 2);
 			dots[row][col].y = dots[row][col - 1].y - (edge / 2);
-			printf("col dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
-			printf("col dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
+			//printf("col dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
+			//printf("col dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
 			col++;
 		}
-		col = 0;
 		row++;
-		dots[row][col].x = dots[row - 1][col].x + (edge / 2);
-		dots[row][col].y = dots[row - 1][col].y + (edge / 2);
-		printf("new row dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
-		printf("new row dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
-		col++;
-
 	}
-	printf("rows: %i\n", row);
-	printf("columns: %i\n", col);
+	// printf("rows: %i\n", row);
+	// printf("columns: %i\n", col);
 	//set_dots_volume(fdf, edge);
 	return (dots);
 }
@@ -159,16 +180,21 @@ void	render_line(t_data *img, t_dot start, t_dot end)
 	double	x_steps;
 	double	y_steps;
 
-	x_distance = start.x - end.x; // if > 0 -> direita
-	y_distance = start.y - end.y; // if > 0 -> baixo
+	// printf("sx %f\nex %f\n\nsy %f\ney %f\n\n\n\n", start.x, end.x, start.y, end.y);
+	x_distance = end.x - start.x; // if > 0 -> direita
+	y_distance = end.y - start.y; // if > 0 -> baixo
+	// printf("psx %f\npex %f\n\npsy %f\npey %f\n\n\n\n", start.x, end.x, start.y, end.y);
 	//
+	//printf("Pre x_start: %f | pre y_start: %f | pre x_end: %f | pre y_end: %f\n", start.x, start.y, end.x, end.y);
 	x_steps = get_proportion(x_distance, y_distance);
 	y_steps = get_proportion(y_distance, x_distance);
-	//
+	// printf("pos x_start: %f | pos y_start: %f | pos x_end: %f | pos y_end: %f\n", start.x, start.y, end.x, end.y);
+	// printf("x_steps: %f | y_steps: %f\n", x_steps, y_steps);
 	while ((start.x != end.x || start.y != end.y) && start.x >= 0 && start.x <= WIN_WIDTH && start.y >= 0 && start.y <= WIN_HEIGHT)
 	{
+		printf("PRE: x entrando: %f | y entrando: %f\n", start.x, start.y);
 		my_mlx_pixel_put(img, start.x, start.y, 0xFF79C6);
-		start.y += x_steps;
+		start.x += x_steps;
 		start.y += y_steps;
 
 	}
@@ -185,6 +211,8 @@ void	render_fdf(t_data *img, t_fdf fdf)
 	{
 		start = 0;
 		end = fdf.columns - 1;
+		// printf("fdf.dots[%i][end].x %f\n", count, fdf.dots[count][end].x);
+		// printf("fdf.dots[%i][end].y %f\n\n", count, fdf.dots[count][end].y);
 		render_line(img, fdf.dots[count][start], fdf.dots[count][end]);
 		count++;
 	}
@@ -198,6 +226,7 @@ void	render_fdf(t_data *img, t_fdf fdf)
 	}
 
 }
+
 
 int	main(int argc, char **argv)
 {
@@ -234,17 +263,17 @@ int	main(int argc, char **argv)
 			return (1);
 		fdf->rows = map->rows;
 		fdf->columns = map->columns;
-		printf("rows: %i\ncolumns: %i\n", map->rows, map->columns);
+		// printf("rows: %i\ncolumns: %i\n", map->rows, map->columns);
 		print_tab(map);
 		//	generate fdf
 		fdf->dots = set_dots(*fdf, *map);
 
-		printf("start1.x: %f \nstart1.y: %f\n", fdf->dots[0][0].x, fdf->dots[0][0].y);
+		// printf("start1.x: %f \nstart1.y: %f\n", fdf->dots[0][0].x, fdf->dots[0][0].y);
 
 		render_fdf(&img, *fdf);
 
 
-
+		render_line(&img, fdf->dots[0][0], fdf->dots[0][1]);
 		mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 		mlx_loop(mlx);
 	}
