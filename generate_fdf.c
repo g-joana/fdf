@@ -57,24 +57,12 @@ int	get_map_height(t_map map)
 	// preciso passar fdf de parâmetro?
 	return (highest_vol - lowest_vol);
 }
-
+/*
 //	a partir do tamanho da altura e largura do mapa (em pontos) e altura e largura da janela (em px), calcula o espaçamento entre os pontos (em px)
 int	get_edge_size(t_map map)
 {
-	int	map_width;
-	int	map_height;
-	int	edge_size;
-
-	map_width = map.columns + map.rows;
-	map_height = get_map_height(map);
-
-	if (map_width > map_height)
-		edge_size = WIN_WIDTH / map_width;
-	else
-		edge_size = WIN_HEIGHT / map_height;
-	return (edge_size);
 }
-/*
+
 void 	set_dots_volume(t_fdf *fdf, double edge)
 {
 	(void) fdf, (void) edge;
@@ -91,9 +79,9 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 	int	col;
 	t_dot	**dots;
 
-	//edge = 50;
-	//(void)map;
-	edge = get_edge_size(map);
+	edge = 50;
+	(void)map;
+	//edge = get_edge_size(map);
 	// start = (WIN_WIDTH - (fdf->columns + fdf->rows * (edge / 2)) / 2);
 	//map_width = fdf->columns + fdf->rows;
 	count = 0;
