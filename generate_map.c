@@ -14,7 +14,7 @@ int	gnl_len(char *file)
 	return (len);
 }
 
-int	count_tab(char *file)
+int	count_tab_numbers(char *file)
 {
 	int	fd;
 	int	len;
@@ -77,13 +77,13 @@ t_map	*generate_map(char *file)
 
 	count = 0;
 	map = (t_map *)malloc(1 * sizeof(t_map));
-	map->rows = count_tab(file);
+	map->columns = count_tab_numbers(file);
 	fd = open(file, O_RDONLY);
-	map->columns = gnl_len(file);
-	map->z = (int **)malloc(map->columns * sizeof(int *));
-	while (count < map->columns)
+	map->rows = gnl_len(file);
+	map->z = (int **)malloc(map->rows * sizeof(int *));
+	while (count < map->rows)
 	{
-		map->z[count] = tab_atoi(ft_split(get_next_line(fd), ' '), map->rows);
+		map->z[count] = tab_atoi(ft_split(get_next_line(fd), ' '), map->columns);
 		if (map->z[count] == 0)
 		{
 			printf("%s\n", "Found wrong line length. Exiting.");

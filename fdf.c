@@ -8,10 +8,10 @@ void	print_tab(t_map *map)
 	int	count2;
 
 	count = 0;
-	while(count < map->columns)
+	while(count < map->rows)
 	{
 		count2 = 0;
-		while(count2 < map->rows)
+		while(count2 < map->columns)
 		{
 			printf("%i ", map->z[count][count2]);
 			count2++;

@@ -17,23 +17,23 @@ int	get_map_height(t_map map)
 	int	lowest_vol;
 	int	vol;
 
-	highest_vol = 0;
+	highest_vol = map.rows + map.columns;
 	lowest_vol = 0;
-	x = 0;
-	while (x < map.rows)
+	y = 0;
+	while (y < map.rows)
 	{
-		y = 0;
-		while (y < map.columns)
+		x = 0;
+		while (x < map.columns)
 		{
-			// TEST: não sei se essa conta ta certa
-			vol = (map.rows - (x - y) + map.z[x][y]) + (map.columns - y);
+			// TODO: repensar essa conta
+			vol = (x + 1) + (y + 1) + (map.z[y][x] * 2);
 			if (vol > highest_vol)
-				highest_vol = map.z[x][y];
+				highest_vol = vol;
 			if (vol < lowest_vol)
-				lowest_vol = map.z[x][y];
-			y++;
+				lowest_vol = vol;
+			x++;
 		}
-		x++;
+		y++;
 	}
 	// preciso passar fdf de parâmetro?
 	return (highest_vol - lowest_vol);
@@ -50,9 +50,9 @@ int	get_edge_size(t_map map)
 	map_height = get_map_height(map);
 
 	if (map_width > map_height)
-		edge_size = map_width / WIN_WIDTH;
+		edge_size = WIN_WIDTH / map_width;
 	else
-		edge_size = map_height / WIN_HEIGHT;
+		edge_size = WIN_HEIGHT / map_height;
 	return (edge_size);
 }
 /*
@@ -63,36 +63,62 @@ void 	set_dots_volume(t_fdf *fdf, double edge)
 }
 */
 //	a partir do edge_size e do mapa, define o par ordenado de cada ponto do fdf
-void	set_dots(t_fdf *fdf, t_map map)
+t_dot	**set_dots(t_fdf fdf, t_map map)
 {
+	int	count;
 	double	edge;
 	// int	start;
 	int	row;
 	int	col;
+	t_dot	**dots;
 
-	//edge = 20;
+	//edge = 50;
+	//(void)map;
 	edge = get_edge_size(map);
 	// start = (WIN_WIDTH - (fdf->columns + fdf->rows * (edge / 2)) / 2);
 	//map_width = fdf->columns + fdf->rows;
-
+	count = 0;
+	dots = (t_dot **)malloc(fdf.rows * sizeof(t_dot *));
+	while (count < fdf.rows)
+	{
+		dots[count] = (t_dot *)malloc(fdf.columns * sizeof(t_dot));
+		count++;
+	}
 	row = 0;
 	col = 0;
 	//start
-	fdf->dots[row][col].x = 0;
-	fdf->dots[row][col].y = WIN_HEIGHT - (fdf->columns * (edge / 2));
-	while (row++ < fdf->rows)
+	dots[row][col].x = 0;
+	dots[row][col].y = WIN_HEIGHT - (fdf.rows * (edge / 2));
+	printf("fdf.rows: %i\n", fdf.rows);
+	printf("fdf.columns: %i\n", fdf.columns);
+	printf("edge: %f\n", edge);
+	printf("dots[row][col].x: %f\n", dots[row][col].x);
+	printf("dots[row][col].y: %f\n", dots[row][col].y);
+	printf("\n\n");
+	col++;
+	while (row < fdf.rows)
 	{
-		while (col++ < fdf->columns)
+		while (col < fdf.columns)
 		{
-			fdf->dots[row][col].x = fdf->dots[row][col - 1].x + (edge / 2);
-			fdf->dots[row][col].y = fdf->dots[row][col - 1].y - (edge / 2);
+			dots[row][col].x = dots[row][col - 1].x + (edge / 2);
+			dots[row][col].y = dots[row][col - 1].y - (edge / 2);
+			printf("col dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
+			printf("col dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
+			col++;
 		}
 		col = 0;
-		fdf->dots[row][col].x = fdf->dots[row - 1][col].x + (edge / 2);
-		fdf->dots[row][col].y = fdf->dots[row - 1][col].y + (edge / 2);
+		row++;
+		dots[row][col].x = dots[row - 1][col].x + (edge / 2);
+		dots[row][col].y = dots[row - 1][col].y + (edge / 2);
+		printf("new row dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
+		printf("new row dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
+		col++;
 
 	}
+	printf("rows: %i\n", row);
+	printf("columns: %i\n", col);
 	//set_dots_volume(fdf, edge);
+	return (dots);
 }
 
 //	a partir da distância entre um ponto e outro de cada eixo, calcula e retorna o tamanho a ser incrementado no valor inicial para fazer essa linha;
@@ -148,65 +174,78 @@ void	render_line(t_data *img, t_dot start, t_dot end)
 	}
 }
 
-void	render_fdf(t_data *img, t_fdf *fdf)
+void	render_fdf(t_data *img, t_fdf fdf)
 {
-	int	dots;
 	int	count;
 	int	start;
 	int	end;
 
-	dots = fdf->rows * fdf->columns;
-	while (count < dots)
+	count = 0;
+	while (count < fdf.rows)
 	{
-		start = count;
-		end = count + fdf->columns;
-		render_line(img, *fdf->dots[start], *fdf->dots[end]);
-		count = end++;
+		start = 0;
+		end = fdf.columns - 1;
+		render_line(img, fdf.dots[count][start], fdf.dots[count][end]);
+		count++;
 	}
 	count = 0;
-	dots = fdf->columns;
-	while (count < dots)
+	while (count < fdf.columns)
 	{
-		start = count;
-		end = count + (fdf->columns * (fdf->rows - 1));
-		render_line(img, *fdf->dots[start], *fdf->dots[end]);
+		start = 0;
+		end = fdf.rows - 1;
+		render_line(img, fdf.dots[start][count], fdf.dots[end][count]);
 		count++;
 	}
 
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	//int	y;
 	// int	x;
 	void	*mlx;
 	void	*mlx_win;
 	t_data	img;
-	t_fdf	fdf;
-	// t_map map;
+	t_fdf	*fdf;
+	t_map	*map;
 
-	mlx = mlx_init();
+	if (argc == 2)
+	{
+		mlx = mlx_init();
 
-	mlx_win = mlx_new_window(mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
-	img.img = mlx_new_image(mlx, WIN_WIDTH, WIN_HEIGHT);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-	
-	//map = generate_map(map);
-	// y = 100;
-	// x = 100;
-	// while (x <= 400 && y <= 400)
-	// {
-	// 	my_mlx_pixel_put(&img, x, y, 0x00FF0000);
-	// 	x++;
-	// 	y++;
-	
-	fdf = (t_fdf *)malloc(sizeof(t_fdf));
+		mlx_win = mlx_new_window(mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
+		img.img = mlx_new_image(mlx, WIN_WIDTH, WIN_HEIGHT);
+		img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 
-	set_dots(fdf, map);
-	render_fdf(fdf);
+		//map = generate_map(map);
+		// y = 100;
+		// x = 100;
+		// while (x <= 400 && y <= 400)
+		// {
+		// 	my_mlx_pixel_put(&img, x, y, 0x00FF0000);
+		// 	x++;
+		// 	y++;
+
+		fdf = (t_fdf *)malloc(sizeof(t_fdf));
+		if (validate(argv[1]) == 0)
+			return (1);
+		map = generate_map(argv[1]);
+		if (map == NULL)
+			return (1);
+		fdf->rows = map->rows;
+		fdf->columns = map->columns;
+		printf("rows: %i\ncolumns: %i\n", map->rows, map->columns);
+		print_tab(map);
+		//	generate fdf
+		fdf->dots = set_dots(*fdf, *map);
+
+		printf("start1.x: %f \nstart1.y: %f\n", fdf->dots[0][0].x, fdf->dots[0][0].y);
+
+		render_fdf(&img, *fdf);
 
 
 
-	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
-	mlx_loop(mlx);
+		mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
+		mlx_loop(mlx);
+	}
 }

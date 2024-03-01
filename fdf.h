@@ -50,6 +50,7 @@ typedef struct	s_data {
 	int		endian;
 }				t_data;
 
+void	print_tab(t_map *map);
 int	gnl_len(char *file);
 int	count_tab(char *file);
 int	*tab_atoi(char **tab, int size);
