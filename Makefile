@@ -6,7 +6,7 @@
 #    By: jgils <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/28 00:04:41 by jgils             #+#    #+#              #
-#    Updated: 2024/02/28 00:57:36 by jgils            ###   ########.fr        #
+#    Updated: 2024/03/05 03:38:22 by jgils            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFT=libft/libft.a
 MINILIBX=minilibx-linux/libmlx_Linux.a
 CC=cc
 FLAGS=-Wall -Wextra -Werror -ggdb3 
-INCLUDES=-Imlx_linux -lXext -lX11
+INCLUDES=-Imlx_linux -lXext -lX11 -lm
 
 all: $(NAME)
 

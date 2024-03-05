@@ -8,11 +8,11 @@
 #endif
 
 #ifndef WIN_WIDTH
-# define WIN_WIDTH 900
+# define WIN_WIDTH 900.0
 #endif
 
 #ifndef WIN_HEIGHT
-# define WIN_HEIGHT 600
+# define WIN_HEIGHT 600.0
 #endif
 
 typedef struct	s_dot {
@@ -30,6 +30,8 @@ typedef struct	s_map {
 	int	columns;
 	int	rows;
 	int	**z;
+	double	width;
+	double	new_height;
 }	t_map;
 
 typedef struct	s_fdf {

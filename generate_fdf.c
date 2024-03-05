@@ -1,4 +1,5 @@
 #include "fdf.h"
+#include <math.h>
 
 void print_dots(t_fdf *fdf)
 {
@@ -37,7 +38,8 @@ int	get_height_proportion(t_map map)
 	int	vol;
 
 	highest_h = map.columns;
-	lowest_h = map.rows;
+	lowest_h = -map.rows;
+	vol = 0;
 	y = 0;
 	while (y < map.rows)
 	{
@@ -45,7 +47,7 @@ int	get_height_proportion(t_map map)
 		while (x < map.columns)
 		{
 			//TEST:
-			vol += (map.z[y][x] * 2) - (map.columns - x);
+			vol = (map.z[y][x] * 2) + x - y;
 			// cada edge da base tem h de altura e cada edge vertical tem 2h de altura.
 			// cada vez que o x aumenta, o volume aumenta junto.
 			// aumentar: aumentar seria subir(-) na tela(eixo y), pois sua origem mudaria.
@@ -62,22 +64,23 @@ int	get_height_proportion(t_map map)
 	return (highest_h - lowest_h);
 }
 
-//	a partir do tamanho da altura e largura do mapa (em pontos) e altura e largura da janela (em px), calcula o espaçamento entre os pontos (em px)
-double	get_edge_height(t_map map)
+//TEST:
+double	get_edge_height(t_map *map)
 {	
 	double	edge_h;
-	int	new_height;
-	int	width;
-	int	proportion;
+	int	height_len;
+	double	proportion;
 
-	edge_h = WIN_HEIGHT / get_height_proportion(map);
-	width = sqrt(pow((map.columns * edge_h), 2) + pow((map.rows * edge_h), 2)); 
+	height_len = get_height_proportion(*map);
+	edge_h = WIN_HEIGHT / height_len;
+	map->width = sqrt(pow((map->columns * (edge_h * 2)), 2) + pow((map->rows * (edge_h * 2)), 2)); 
 		//raiz de (map.columns * edge_size) ao 2 + (map.rows * edge_size) ao 2;
-	if (width > WIN_HEIGHT)
+	if (map->width > WIN_WIDTH)
 	{
-		proportion = width / WIN_WIDTH;
-		width = width / proportion;
-		new_height = WIN_HEIGHT / proportion;
+		proportion = map->width / WIN_WIDTH;
+		map->width = map->width / proportion;
+		map->new_height = WIN_HEIGHT / proportion;
+		edge_h = map->new_height / height_len;
 	}
 	return (edge_h);
 }
@@ -86,14 +89,16 @@ double	get_edge_height(t_map map)
 // cateto op = edge height
 // cateto adj = edge width
 // angulo - 30 graus
+//TEST:
 void	get_edge_size(t_edge *edge)
 {
-	int	radians;
+	double radians;
 
-	radians = 30 * (M_PI / 180);
+	radians = 30.0 * (M_PI / 180.0);
 	edge->size = edge->height / sin(radians);
+	printf("30 * (%f / 180) = %f\n", M_PI, radians);
+	printf("edge->size = %f / %f\n", edge->height, sin(radians));
 }
-
 void	get_edge_width(t_edge *edge)
 {
 	int	radians;
@@ -101,8 +106,8 @@ void	get_edge_width(t_edge *edge)
 	radians = 30 * (M_PI / 180);
 	edge->width = edge->size / cos(radians);
 }
-
 /*
+
 void 	set_dots_volume(t_fdf *fdf, double edge)
 {
 	(void) fdf, (void) edge;
@@ -118,8 +123,9 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 	int	row;
 	int	col;
 	t_dot	**dots;
-
-	edge.height = get_edge_height(map);
+	
+	//TEST:
+	edge.height = get_edge_height(&map);
 	get_edge_size(&edge);
 	get_edge_width(&edge);
 	// start = (WIN_WIDTH - (fdf->columns + fdf->rows * (edge / 2)) / 2);
@@ -134,29 +140,31 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 	row = 0;
 	col = 0;
 	//start
-	dots[row][col].x = 0;
+	dots[row][col].x = (WIN_WIDTH - map.width) / 2;
 	dots[row][col].y = WIN_HEIGHT - (fdf.rows * edge.height);
 	// printf("fdf.rows: %i\n", fdf.rows);
 	// printf("fdf.columns: %i\n", fdf.columns);
 	// printf("edge: %f\n", edge);
-	// printf("dots[row][col].x: %f\n", dots[row][col].x);
-	// printf("dots[row][col].y: %f\n", dots[row][col].y);
+	printf("dots[row][col].x: %f\n", dots[row][col].x);
+	printf("dots[row][col].y: %f\n", dots[row][col].y);
 	printf("\n\n");
 	col++;
+	//FIX: primeira linha gigante
 	while (row < fdf.rows)
 	{
 		if (row > 0)
 		{
 			col = 0;
-			dots[row][col].x = dots[row - 1][col].x + edge.height;
+			dots[row][col].x = dots[row - 1][col].x + edge.width;
 			dots[row][col].y = dots[row - 1][col].y + edge.height;
-			//printf("new row dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
+			printf("new row dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
+			printf("edge width: %f\n", edge.width);
 			//printf("new row dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
 			col++;
 		}
 		while (col < fdf.columns)
 		{
-			dots[row][col].x = dots[row][col - 1].x + edge.height;
+			dots[row][col].x = dots[row][col - 1].x + edge.width;
 			dots[row][col].y = dots[row][col - 1].y - edge.height;
 			//printf("col dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
 			//printf("col dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
@@ -216,14 +224,40 @@ void	render_line(t_data *img, t_dot start, t_dot end)
 	//printf("Pre x_start: %f | pre y_start: %f | pre x_end: %f | pre y_end: %f\n", start.x, start.y, end.x, end.y);
 	x_steps = get_proportion(x_distance, y_distance);
 	y_steps = get_proportion(y_distance, x_distance);
-	// printf("pos x_start: %f | pos y_start: %f | pos x_end: %f | pos y_end: %f\n", start.x, start.y, end.x, end.y);
+	//printf("x_start: %f | y_start: %f | x_end: %f | y_end: %f\n\n", start.x, start.y, end.x, end.y);
 	// printf("x_steps: %f | y_steps: %f\n", x_steps, y_steps);
-	while ((start.x != end.x || start.y != end.y) && start.x >= 0 && start.x <= WIN_WIDTH && start.y >= 0 && start.y <= WIN_HEIGHT)
+	// printf("end.x: %f | end.y: %f\n", end.x, end.y);
+	// FIX:PROBLEMA DAS LINHAS NAO TERMINAREM ESTA AQUI!!!!!!!!!!
+	// ESSE != GERA COM QUE START.X != X_STEPS NAO CAIA EXATAMENTE EM END.X
+	//
+	//(start.x != end.x || start.y != end.y)
+	while (start.x >= 0 && start.x <= WIN_WIDTH && start.y >= 0 && start.y <= WIN_HEIGHT)
 	{
+		if ((end.x < 0) && (end.y < 0))
+		{
+			if (start.x <= end.x)
+				break ;
+		}
+		else if (end.x > 0)
+		{
+			if (start.x >= end.x)
+				break ;
+		}
+		if (end.y < 0)
+		{
+			if (start.y <= end.y)
+				break ;
+		}
+		else if (end.y > 0)
+		{
+			if (start.y >= end.y)
+				break ;
+		}
 		printf("PRE: x entrando: %f | y entrando: %f\n", start.x, start.y);
 		my_mlx_pixel_put(img, start.x, start.y, 0xFF79C6);
 		start.x += x_steps;
 		start.y += y_steps;
+		printf("POST: x entrando: %f | y entrando: %f\n", start.x, start.y);
 
 	}
 }
@@ -295,7 +329,7 @@ int	main(int argc, char **argv)
 		print_tab(map);
 		//	generate fdf
 		fdf->dots = set_dots(*fdf, *map);
-
+		print_dots(fdf);
 		// printf("start1.x: %f \nstart1.y: %f\n", fdf->dots[0][0].x, fdf->dots[0][0].y);
 
 		render_fdf(&img, *fdf);
