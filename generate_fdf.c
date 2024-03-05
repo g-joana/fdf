@@ -27,42 +27,82 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dest = color;
 }
 
-//	a partir dos dados do mapa, calcula o tamanho da altura (em quantidade de pontos)
-int	get_map_height(t_map map)
+//	calcula  (em quantidade de edge_h)
+int	get_height_proportion(t_map map)
 {
 	int	y;
 	int	x;
-	int	highest_vol;
-	int	lowest_vol;
+	int	highest_h;
+	int	lowest_h;
 	int	vol;
 
-	highest_vol = map.rows + map.columns;
-	lowest_vol = 0;
+	highest_h = map.columns;
+	lowest_h = map.rows;
 	y = 0;
 	while (y < map.rows)
 	{
 		x = 0;
 		while (x < map.columns)
 		{
-			// TODO: repensar essa conta
-			vol = (x + 1) + (y + 1) + (map.z[y][x] * 2);
-			if (vol > highest_vol)
-				highest_vol = vol;
-			if (vol < lowest_vol)
-				lowest_vol = vol;
+			//TEST:
+			vol += (map.z[y][x] * 2) - (map.columns - x);
+			// cada edge da base tem h de altura e cada edge vertical tem 2h de altura.
+			// cada vez que o x aumenta, o volume aumenta junto.
+			// aumentar: aumentar seria subir(-) na tela(eixo y), pois sua origem mudaria.
+			// por fim, o volume sobreescreve o volume inicial (so a base) contando com os relevos, caso tenha algum que passe essa altura
+			if (vol > highest_h)
+				highest_h = vol;
+			if (vol < lowest_h)
+				lowest_h = vol;
 			x++;
 		}
 		y++;
+		vol = -y;
 	}
-	// preciso passar fdf de parâmetro?
-	return (highest_vol - lowest_vol);
-}
-/*
-//	a partir do tamanho da altura e largura do mapa (em pontos) e altura e largura da janela (em px), calcula o espaçamento entre os pontos (em px)
-int	get_edge_size(t_map map)
-{
+	return (highest_h - lowest_h);
 }
 
+//	a partir do tamanho da altura e largura do mapa (em pontos) e altura e largura da janela (em px), calcula o espaçamento entre os pontos (em px)
+double	get_edge_height(t_map map)
+{	
+	double	edge_h;
+	int	new_height;
+	int	width;
+	int	proportion;
+
+	edge_h = WIN_HEIGHT / get_height_proportion(map);
+	width = sqrt(pow((map.columns * edge_h), 2) + pow((map.rows * edge_h), 2)); 
+		//raiz de (map.columns * edge_size) ao 2 + (map.rows * edge_size) ao 2;
+	if (width > WIN_HEIGHT)
+	{
+		proportion = width / WIN_WIDTH;
+		width = width / proportion;
+		new_height = WIN_HEIGHT / proportion;
+	}
+	return (edge_h);
+}
+
+// hipotenusa = edge size
+// cateto op = edge height
+// cateto adj = edge width
+// angulo - 30 graus
+void	get_edge_size(t_edge *edge)
+{
+	int	radians;
+
+	radians = 30 * (M_PI / 180);
+	edge->size = edge->height / sin(radians);
+}
+
+void	get_edge_width(t_edge *edge)
+{
+	int	radians;
+
+	radians = 30 * (M_PI / 180);
+	edge->width = edge->size / cos(radians);
+}
+
+/*
 void 	set_dots_volume(t_fdf *fdf, double edge)
 {
 	(void) fdf, (void) edge;
@@ -73,15 +113,15 @@ void 	set_dots_volume(t_fdf *fdf, double edge)
 t_dot	**set_dots(t_fdf fdf, t_map map)
 {
 	int	count;
-	double	edge;
+	t_edge	edge;
 	// int	start;
 	int	row;
 	int	col;
 	t_dot	**dots;
 
-	edge = 50;
-	(void)map;
-	//edge = get_edge_size(map);
+	edge.height = get_edge_height(map);
+	get_edge_size(&edge);
+	get_edge_width(&edge);
 	// start = (WIN_WIDTH - (fdf->columns + fdf->rows * (edge / 2)) / 2);
 	//map_width = fdf->columns + fdf->rows;
 	count = 0;
@@ -95,7 +135,7 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 	col = 0;
 	//start
 	dots[row][col].x = 0;
-	dots[row][col].y = WIN_HEIGHT - (fdf.rows * (edge / 2));
+	dots[row][col].y = WIN_HEIGHT - (fdf.rows * edge.height);
 	// printf("fdf.rows: %i\n", fdf.rows);
 	// printf("fdf.columns: %i\n", fdf.columns);
 	// printf("edge: %f\n", edge);
@@ -108,16 +148,16 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 		if (row > 0)
 		{
 			col = 0;
-			dots[row][col].x = dots[row - 1][col].x + (edge / 2);
-			dots[row][col].y = dots[row - 1][col].y + (edge / 2);
+			dots[row][col].x = dots[row - 1][col].x + edge.height;
+			dots[row][col].y = dots[row - 1][col].y + edge.height;
 			//printf("new row dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
 			//printf("new row dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
 			col++;
 		}
 		while (col < fdf.columns)
 		{
-			dots[row][col].x = dots[row][col - 1].x + (edge / 2);
-			dots[row][col].y = dots[row][col - 1].y - (edge / 2);
+			dots[row][col].x = dots[row][col - 1].x + edge.height;
+			dots[row][col].y = dots[row][col - 1].y - edge.height;
 			//printf("col dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
 			//printf("col dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
 			col++;

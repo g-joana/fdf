@@ -1,6 +1,7 @@
 #include "minilibx-linux/mlx.h"
 #include "minilibx-linux/mlx_int.h"
 #include "libft/libft.h"
+#include <math.h>
 
 #ifndef EDGE_SIZE
 # define EDGE_SIZE 42
@@ -18,6 +19,12 @@ typedef struct	s_dot {
 	double	x;
 	double	y;
 }	t_dot;
+
+typedef struct	s_edge {
+	double	height;
+	double	width;
+	double	size;
+}	t_edge;
 
 typedef struct	s_map {
 	int	columns;
