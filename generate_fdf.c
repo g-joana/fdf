@@ -12,7 +12,7 @@ void print_dots(t_fdf *fdf)
 		count2 = 0;
 		while (count2 < fdf->columns)
 		{
-			printf("dot.x: %f | dot.y: %f\n", fdf->dots[count1][count2].x, fdf->dots[count1][count2].y);
+			// printf("dot.x: %f | dot.y: %f\n", fdf->dots[count1][count2].x, fdf->dots[count1][count2].y);
 			count2++;
 		}
 		printf("\n");
@@ -96,8 +96,8 @@ void	get_edge_size(t_edge *edge)
 
 	radians = 30.0 * (M_PI / 180.0);
 	edge->size = edge->height / sin(radians);
-	printf("30 * (%f / 180) = %f\n", M_PI, radians);
-	printf("edge->size = %f / %f\n", edge->height, sin(radians));
+	// printf("30 * (%f / 180) = %f\n", M_PI, radians);
+	// printf("edge->size = %f / %f\n", edge->height, sin(radians));
 }
 void	get_edge_width(t_edge *edge)
 {
@@ -145,9 +145,9 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 	// printf("fdf.rows: %i\n", fdf.rows);
 	// printf("fdf.columns: %i\n", fdf.columns);
 	// printf("edge: %f\n", edge);
-	printf("dots[row][col].x: %f\n", dots[row][col].x);
-	printf("dots[row][col].y: %f\n", dots[row][col].y);
-	printf("\n\n");
+	// printf("dots[row][col].x: %f\n", dots[row][col].x);
+	// printf("dots[row][col].y: %f\n", dots[row][col].y);
+	// printf("\n\n");
 	col++;
 	//FIX: primeira linha gigante
 	while (row < fdf.rows)
@@ -157,8 +157,8 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 			col = 0;
 			dots[row][col].x = dots[row - 1][col].x + edge.width;
 			dots[row][col].y = dots[row - 1][col].y + edge.height;
-			printf("new row dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
-			printf("edge width: %f\n", edge.width);
+			//printf("new row dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
+			//printf("edge width: %f\n", edge.width);
 			//printf("new row dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
 			col++;
 		}
@@ -185,6 +185,7 @@ double	get_proportion(int distance1, int distance2)
 	int	negative;
 
 	negative = 1;
+
 	if (distance1 < 0)
 	{
 		distance1 *= -1;
@@ -209,6 +210,21 @@ double	get_proportion(int distance1, int distance2)
 	return (proportion * negative);
 }
 
+int	line(double dist, double start, double end)
+{
+	if (dist < 0)
+	{
+		if (start <= end)
+			return (1);
+	}
+	else if (dist > 0)
+	{
+		if (start >= end)
+			return (1);
+	}
+	return (0);
+}
+
 void	render_line(t_data *img, t_dot start, t_dot end)
 {
 	int	x_distance;
@@ -231,33 +247,15 @@ void	render_line(t_data *img, t_dot start, t_dot end)
 	// ESSE != GERA COM QUE START.X != X_STEPS NAO CAIA EXATAMENTE EM END.X
 	//
 	//(start.x != end.x || start.y != end.y)
-	while (start.x >= 0 && start.x <= WIN_WIDTH && start.y >= 0 && start.y <= WIN_HEIGHT)
+	while (!line(x_distance, start.x, end.x) && !line(y_distance, start.y, end.y)
+					&& start.x >= 0 && start.y >= 0 && 
+						start.x <= WIN_WIDTH && start.y <= WIN_HEIGHT)
 	{
-		if ((end.x < 0) && (end.y < 0))
-		{
-			if (start.x <= end.x)
-				break ;
-		}
-		else if (end.x > 0)
-		{
-			if (start.x >= end.x)
-				break ;
-		}
-		if (end.y < 0)
-		{
-			if (start.y <= end.y)
-				break ;
-		}
-		else if (end.y > 0)
-		{
-			if (start.y >= end.y)
-				break ;
-		}
-		printf("PRE: x entrando: %f | y entrando: %f\n", start.x, start.y);
+		//printf("PRE: x entrando: %f | y entrando: %f\n", start.x, start.y);
 		my_mlx_pixel_put(img, start.x, start.y, 0xFF79C6);
 		start.x += x_steps;
 		start.y += y_steps;
-		printf("POST: x entrando: %f | y entrando: %f\n", start.x, start.y);
+		//printf("POST: x entrando: %f | y entrando: %f\n", start.x, start.y);
 
 	}
 }
@@ -326,10 +324,10 @@ int	main(int argc, char **argv)
 		fdf->rows = map->rows;
 		fdf->columns = map->columns;
 		// printf("rows: %i\ncolumns: %i\n", map->rows, map->columns);
-		print_tab(map);
+		// print_tab(map);
 		//	generate fdf
 		fdf->dots = set_dots(*fdf, *map);
-		print_dots(fdf);
+		// print_dots(fdf);
 		// printf("start1.x: %f \nstart1.y: %f\n", fdf->dots[0][0].x, fdf->dots[0][0].y);
 
 		render_fdf(&img, *fdf);
