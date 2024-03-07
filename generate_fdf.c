@@ -201,7 +201,7 @@ t_dot	**set_dots(t_fdf fdf, t_map map, t_edge *edge)
 }
 
 //	a partir da distância entre um ponto e outro de cada eixo, calcula e retorna o tamanho a ser incrementado no valor inicial para fazer essa linha;
-double	get_proportion(int distance1, int distance2)
+double	get_proportion(double distance1, double distance2)
 {
 	double	proportion;
 	int	negative;
@@ -249,8 +249,8 @@ int	line(double dist, double start, double end)
 
 void	render_line(t_data *img, t_dot start, t_dot end)
 {
-	int	x_distance;
-	int	y_distance;
+	double	x_distance;
+	double	y_distance;
 	double	x_steps;
 	double	y_steps;
 
@@ -354,3 +354,7 @@ int	main(int argc, char **argv)
 		mlx_loop(mlx);
 	}
 }
+
+//math.stackexchange.com/questions/989900/calculate-x-y-z-from-two-specific-degrees-on-a-sphere
+//https://www.linearity.io/blog/isometric-design
+//https://www.mathematics-monster.com/glossary/right_triangles.html
