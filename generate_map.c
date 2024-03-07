@@ -13,31 +13,39 @@ int	gnl_len(char *file)
 	while (line)
 	{
 		len++;
+		printf("len: %i | line: %s\n", len, line);
 		free(line);
 		line = get_next_line(fd);
-		printf("len: %i | line: %s\n", len, line);
 	}
 	close(fd);
 	return (len);
 }
 
-int	count_tab_numbers(char *file)
+int	count_gnl_numbers(char *gnl)
 {
-	int	fd;
 	int	len;
-	char	**split;
+	int	number;
 
 	len = 0;
-	fd = open(file, O_RDONLY);
-	split = ft_split(get_next_line(fd), ' ');
-	while (split[len] && (split[len][0] != '\n' || split[len][0] != '\0'))
+	number = 0;
+	while (gnl[len] && gnl[len] != '\n' && gnl[len] != '\0')
 	{
-		if (split[len][0] == '\n' || split[len][0] == '\0')
+		while (gnl[len] == ' ')
+			len++;
+		if (gnl[len] == '\0' || gnl[len] == '\n')
 			break ;
-		len++;
+		while (gnl[len] != ' ')
+		{	
+			if (gnl[len + 1] == '\0' || gnl[len + 1] == '\n' || gnl[len + 1] == ' ')
+			{	
+				len++;
+				number++;
+				break ;
+			}
+			len++;
+		}
 	}
-	close(fd);
-	return (len);
+	return (number);
 }
 
 int	tab_len(char **tab)
@@ -62,7 +70,7 @@ int	*tab_atoi(char **tab, int size)
 
 	count = 0;
 	len = tab_len(tab);
-	if (len != size)
+	if (size == 0)
 		return (0);
 	atoi_tab = (int *)malloc(len * sizeof(int));
 	while (tab && tab[count])
@@ -70,9 +78,10 @@ int	*tab_atoi(char **tab, int size)
 		if (tab[count][0] == '\n' || tab[count][0] == '\0')
 			break ;
 		atoi_tab[count] = ft_atoi(tab[count]);
+		free(tab[count]);
 		count++;
 	}
-	count--;
+	free(tab);
 	return (atoi_tab);
 }
 
@@ -80,27 +89,33 @@ t_map	*generate_map(char *file)
 {
 	int	fd;
 	int	count;
+	char	*line;
 	t_map	*map;
 
 	count = 0;
 	map = (t_map *)malloc(1 * sizeof(t_map));
-	map->columns = count_tab_numbers(file);
 	fd = open(file, O_RDONLY);
 	map->rows = gnl_len(file);
 	map->z = (int **)malloc(map->rows * sizeof(int *));
 	// printf("map rows: %i\n", map->rows);
+	line = get_next_line(fd);
+	map->columns = count_gnl_numbers(line);
 	while (count < map->rows)
 	{
-		map->z[count] = tab_atoi(ft_split(get_next_line(fd), ' '), map->columns);
+		map->z[count] = (int *)malloc(map->columns * sizeof(int));
+		map->z[count] = tab_atoi(ft_split(line, ' '), map->columns);
 		if (map->z[count] == 0)
 		{
 			//printf("linha: %i\n", count);
 			printf("%s\n", "Found wrong line length. Exiting.");
 			return (NULL);
 		}
+		free(line);
+		line = get_next_line(fd);
 		count++;
 	}
 	//map->rows = count;
+	free(line);
 	close(fd);
 	return (map);
 }

@@ -64,17 +64,31 @@ int	get_height_proportion(t_map map)
 	return (highest_h - lowest_h);
 }
 
-//TEST:
+double	get_edge_width(double edge_size)
+{
+	double	edge_width;
+	double	radians;
+
+	radians = 30.0 * (M_PI / 180.0);
+	edge_width = edge_size / cos(radians);
+
+	return (edge_width);
+}
+
 double	get_edge_height(t_map *map)
 {	
 	double	edge_h;
+	double	edge_width;
 	int	height_len;
 	double	proportion;
 
 	height_len = get_height_proportion(*map);
 	edge_h = WIN_HEIGHT / height_len;
-	map->width = sqrt(pow((map->columns * (edge_h * 2)), 2) + pow((map->rows * (edge_h * 2)), 2)); 
-		//raiz de (map.columns * edge_size) ao 2 + (map.rows * edge_size) ao 2;
+	edge_width = get_edge_width(edge_h * 2);
+	map->width = sqrt(pow((map->columns * (edge_width)), 2) + pow((map->rows * (edge_width)), 2)); 
+	// map->width = map->columns * edge_width + map->rows * edge_width; 
+	printf("map width: %f\n", map->width);
+	//raiz de (map.columns * edge_size) ao 2 + (map.rows * edge_size) ao 2;
 	if (map->width > WIN_WIDTH)
 	{
 		proportion = map->width / WIN_WIDTH;
@@ -89,7 +103,7 @@ double	get_edge_height(t_map *map)
 // cateto op = edge height
 // cateto adj = edge width
 // angulo - 30 graus
-//TEST:
+/*
 void	get_edge_size(t_edge *edge)
 {
 	double radians;
@@ -99,35 +113,44 @@ void	get_edge_size(t_edge *edge)
 	// printf("30 * (%f / 180) = %f\n", M_PI, radians);
 	// printf("edge->size = %f / %f\n", edge->height, sin(radians));
 }
-void	get_edge_width(t_edge *edge)
+*/
+void 	set_dots_volume(t_fdf *fdf, t_map map, t_edge edge)
 {
-	int	radians;
+	int	col;
+	int	row;
 
-	radians = 30 * (M_PI / 180);
-	edge->width = edge->size / cos(radians);
-}
-/*
-
-void 	set_dots_volume(t_fdf *fdf, double edge)
-{
-	(void) fdf, (void) edge;
+	row = 0;
+	col = 0;
+	while (row < fdf->rows)
+	{
+		col = 0;
+		while (col < fdf->columns)
+		{
+			fdf->dots[row][col].y -= map.z[row][col] * edge.size;
+			printf("maprowcol: %i | edge.size: %f | result: %f\n", map.z[row][col], edge.size ,map.z[row][col] * edge.size);
+			// printf("dots[%i][%i].y: %f\n", row, col, fdf->dots[row][col].y);
+			// printf("map.z[%i][%i]: %i\n", row, col, map.z[row][col]);
+			col++;
+		}
+		row++;
+	}
 	return ;
 }
-*/
+
 //	a partir do edge_size e do mapa, define o par ordenado de cada ponto do fdf
-t_dot	**set_dots(t_fdf fdf, t_map map)
+t_dot	**set_dots(t_fdf fdf, t_map map, t_edge *edge)
 {
 	int	count;
-	t_edge	edge;
 	// int	start;
 	int	row;
 	int	col;
 	t_dot	**dots;
 	
-	//TEST:
-	edge.height = get_edge_height(&map);
-	get_edge_size(&edge);
-	get_edge_width(&edge);
+	edge->height = get_edge_height(&map);
+	edge->size = edge->height * 2;
+	edge->width = edge->height * sqrt(3);
+	printf("h: %f | s: %f | w: %f\n", edge->height, edge->size, edge->width);
+	//get_edge_size(&edge);
 	// start = (WIN_WIDTH - (fdf->columns + fdf->rows * (edge / 2)) / 2);
 	//map_width = fdf->columns + fdf->rows;
 	count = 0;
@@ -141,7 +164,7 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 	col = 0;
 	//start
 	dots[row][col].x = (WIN_WIDTH - map.width) / 2;
-	dots[row][col].y = WIN_HEIGHT - (fdf.rows * edge.height);
+	dots[row][col].y = WIN_HEIGHT - (fdf.rows * edge->height);
 	// printf("fdf.rows: %i\n", fdf.rows);
 	// printf("fdf.columns: %i\n", fdf.columns);
 	// printf("edge: %f\n", edge);
@@ -149,14 +172,13 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 	// printf("dots[row][col].y: %f\n", dots[row][col].y);
 	// printf("\n\n");
 	col++;
-	//FIX: primeira linha gigante
 	while (row < fdf.rows)
 	{
 		if (row > 0)
 		{
 			col = 0;
-			dots[row][col].x = dots[row - 1][col].x + edge.width;
-			dots[row][col].y = dots[row - 1][col].y + edge.height;
+			dots[row][col].x = dots[row - 1][col].x + edge->width;
+			dots[row][col].y = dots[row - 1][col].y + edge->height;
 			//printf("new row dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
 			//printf("edge width: %f\n", edge.width);
 			//printf("new row dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
@@ -164,8 +186,8 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 		}
 		while (col < fdf.columns)
 		{
-			dots[row][col].x = dots[row][col - 1].x + edge.width;
-			dots[row][col].y = dots[row][col - 1].y - edge.height;
+			dots[row][col].x = dots[row][col - 1].x + edge->width;
+			dots[row][col].y = dots[row][col - 1].y - edge->height;
 			//printf("col dots[%i][%i].x: %f\n", row, col, dots[row][col].x);
 			//printf("col dots[%i][%i].y: %f\n", row, col, dots[row][col].y);
 			col++;
@@ -243,10 +265,7 @@ void	render_line(t_data *img, t_dot start, t_dot end)
 	//printf("x_start: %f | y_start: %f | x_end: %f | y_end: %f\n\n", start.x, start.y, end.x, end.y);
 	// printf("x_steps: %f | y_steps: %f\n", x_steps, y_steps);
 	// printf("end.x: %f | end.y: %f\n", end.x, end.y);
-	// FIX:PROBLEMA DAS LINHAS NAO TERMINAREM ESTA AQUI!!!!!!!!!!
-	// ESSE != GERA COM QUE START.X != X_STEPS NAO CAIA EXATAMENTE EM END.X
 	//
-	//(start.x != end.x || start.y != end.y)
 	while (!line(x_distance, start.x, end.x) && !line(y_distance, start.y, end.y)
 					&& start.x >= 0 && start.y >= 0 && 
 						start.x <= WIN_WIDTH && start.y <= WIN_HEIGHT)
@@ -262,29 +281,23 @@ void	render_line(t_data *img, t_dot start, t_dot end)
 
 void	render_fdf(t_data *img, t_fdf fdf)
 {
-	int	count;
-	int	start;
-	int	end;
+	int	row;
+	int	col;
 
-	count = 0;
-	while (count < fdf.rows)
+	row = 0;
+	while (row < fdf.rows)
 	{
-		start = 0;
-		end = fdf.columns - 1;
-		// printf("fdf.dots[%i][end].x %f\n", count, fdf.dots[count][end].x);
-		// printf("fdf.dots[%i][end].y %f\n\n", count, fdf.dots[count][end].y);
-		render_line(img, fdf.dots[count][start], fdf.dots[count][end]);
-		count++;
+		col = 0;
+		while (col < fdf.columns)
+		{
+			if(row < (fdf.rows - 1))
+				render_line(img, fdf.dots[row][col], fdf.dots[row + 1][col]);
+			if (col < (fdf.columns - 1))
+				render_line(img, fdf.dots[row][col], fdf.dots[row][col + 1]);
+			col++;
+		}
+		row++;
 	}
-	count = 0;
-	while (count < fdf.columns)
-	{
-		start = 0;
-		end = fdf.rows - 1;
-		render_line(img, fdf.dots[start][count], fdf.dots[end][count]);
-		count++;
-	}
-
 }
 
 
@@ -297,6 +310,7 @@ int	main(int argc, char **argv)
 	t_data	img;
 	t_fdf	*fdf;
 	t_map	*map;
+	t_edge	edge;
 
 	if (argc == 2)
 	{
@@ -323,17 +337,19 @@ int	main(int argc, char **argv)
 			return (1);
 		fdf->rows = map->rows;
 		fdf->columns = map->columns;
-		// printf("rows: %i\ncolumns: %i\n", map->rows, map->columns);
+		printf("rows: %i\ncolumns: %i\n", map->rows, map->columns);
 		// print_tab(map);
 		//	generate fdf
-		fdf->dots = set_dots(*fdf, *map);
+		fdf->dots = set_dots(*fdf, *map, &edge);
+		printf("%f\n", fdf->dots[0][0].y);
+		set_dots_volume(fdf, *map, edge);
+		printf("%f\n", fdf->dots[0][0].y);
 		// print_dots(fdf);
 		// printf("start1.x: %f \nstart1.y: %f\n", fdf->dots[0][0].x, fdf->dots[0][0].y);
 
 		render_fdf(&img, *fdf);
 
-
-		render_line(&img, fdf->dots[0][0], fdf->dots[0][1]);
+		printf("acabou de rederizar");
 		mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 		mlx_loop(mlx);
 	}
