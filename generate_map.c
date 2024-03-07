@@ -5,11 +5,18 @@ int	gnl_len(char *file)
 {
 	int	fd;
 	int	len;
+	char	*line;
 
 	len = 0;
 	fd = open(file, O_RDONLY);
-	while (get_next_line(fd))
+	line = get_next_line(fd);
+	while (line)
+	{
 		len++;
+		free(line);
+		line = get_next_line(fd);
+		printf("len: %i | line: %s\n", len, line);
+	}
 	close(fd);
 	return (len);
 }
@@ -81,18 +88,19 @@ t_map	*generate_map(char *file)
 	fd = open(file, O_RDONLY);
 	map->rows = gnl_len(file);
 	map->z = (int **)malloc(map->rows * sizeof(int *));
-	printf("map rows: %i\n", map->rows);
+	// printf("map rows: %i\n", map->rows);
 	while (count < map->rows)
 	{
 		map->z[count] = tab_atoi(ft_split(get_next_line(fd), ' '), map->columns);
 		if (map->z[count] == 0)
 		{
-			printf("linha: %i\n", count);
+			//printf("linha: %i\n", count);
 			printf("%s\n", "Found wrong line length. Exiting.");
 			return (NULL);
 		}
 		count++;
 	}
+	//map->rows = count;
 	close(fd);
 	return (map);
 }
