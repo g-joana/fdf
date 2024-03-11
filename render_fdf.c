@@ -16,19 +16,16 @@ double	get_proportion(double distance1, double distance2)
 
 	negative = 1;
 
-	if (distance1 < 0)
+	if (distance1 == 0)
+		return (0);
+	else if (distance1 < 0)
 	{
 		distance1 *= -1;
 		negative = -1;
 	}
 	if (distance2 < 0)
 		distance2 *= -1;
-
-
-
-	if (distance1 == 0)
-		return (0);
-	if (distance2 == 0)
+	else if (distance2 == 0)
 		return (1 * negative);
 
 
@@ -42,7 +39,9 @@ double	get_proportion(double distance1, double distance2)
 
 int	line(double dist, double start, double end, char axis)
 {
-	if ((start < 0) || (axis == 'x' && start > WIN_WIDTH) || (axis == 'y' && start > WIN_HEIGHT))
+	if ((start < 0)
+		|| (axis == 'x' && start > WIN_WIDTH)
+		|| (axis == 'y' && start > WIN_HEIGHT))
 		return (1);
 	if (dist < 0)
 	{
@@ -68,10 +67,8 @@ void	render_line(t_data *img, t_dot start, t_dot end)
 	y_distance = end.y - start.y; // if > 0 -> baixo
 	x_steps = get_proportion(x_distance, y_distance);
 	y_steps = get_proportion(y_distance, x_distance);
-	//
+	
 	while (!line(x_distance, start.x, end.x, 'x') && !line(y_distance, start.y, end.y, 'y'))
-					// && start.x >= 0 && start.y >= 0 && 
-					//	start.x <= WIN_WIDTH && start.y <= WIN_HEIGHT)
 	{
 		my_mlx_pixel_put(img, start.x, start.y, 0xFF79C6);
 		start.x += x_steps;
