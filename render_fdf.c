@@ -9,7 +9,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 }
 
 //	a partir da distância entre um ponto e outro de cada eixo, calcula e retorna o tamanho a ser incrementado no valor inicial para fazer essa linha;
-double	get_steps(double distance1, double distance2)
+double	get_proportion(double distance1, double distance2)
 {
 	double	proportion;
 	int	negative;
@@ -40,8 +40,10 @@ double	get_steps(double distance1, double distance2)
 	return (proportion * negative);
 }
 
-int	line(double dist, double start, double end)
+int	line(double dist, double start, double end, char axis)
 {
+	if ((start < 0) || (axis == 'x' && start > WIN_WIDTH) || (axis == 'y' && start > WIN_HEIGHT))
+		return (1);
 	if (dist < 0)
 	{
 		if (start <= end)
@@ -64,12 +66,12 @@ void	render_line(t_data *img, t_dot start, t_dot end)
 
 	x_distance = end.x - start.x; // if > 0 -> direita
 	y_distance = end.y - start.y; // if > 0 -> baixo
-	x_steps = get_steps(x_distance, y_distance);
-	y_steps = get_steps(y_distance, x_distance);
+	x_steps = get_proportion(x_distance, y_distance);
+	y_steps = get_proportion(y_distance, x_distance);
 	//
-	while (!line(x_distance, start.x, end.x) && !line(y_distance, start.y, end.y)
-					&& start.x >= 0 && start.y >= 0 && 
-						start.x <= WIN_WIDTH && start.y <= WIN_HEIGHT)
+	while (!line(x_distance, start.x, end.x, 'x') && !line(y_distance, start.y, end.y, 'y'))
+					// && start.x >= 0 && start.y >= 0 && 
+					//	start.x <= WIN_WIDTH && start.y <= WIN_HEIGHT)
 	{
 		my_mlx_pixel_put(img, start.x, start.y, 0xFF79C6);
 		start.x += x_steps;

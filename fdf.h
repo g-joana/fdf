@@ -74,7 +74,7 @@ t_dot	**set_dots(t_fdf fdf, t_map map, t_edge *edge);
 void 	set_dots_volume(t_fdf *fdf, t_map map, t_edge edge);
 //render_fdf.c
 double	get_steps(double distance1, double distance2);
-int	line(double dist, double start, double end);
+int	line(double dist, double start, double end, char axis);
 void	render_line(t_data *img, t_dot start, t_dot end);
 void	render_fdf(t_data *img, t_fdf fdf);
 //window_actions.c

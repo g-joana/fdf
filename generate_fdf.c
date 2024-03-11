@@ -55,19 +55,15 @@ int	main(int argc, char **argv)
 			return (1);
 		fdf->rows = map->rows;
 		fdf->columns = map->columns;
-		printf("rows: %i\ncolumns: %i\n", map->rows, map->columns);
 		// print_tab(map);
 		//	generate fdf
 		fdf->dots = set_dots(*fdf, *map, &edge);
-		printf("%f\n", fdf->dots[0][0].y);
 		set_dots_volume(fdf, *map, edge);
-		printf("%f\n", fdf->dots[0][0].y);
 		// print_dots(fdf);
 		// printf("start1.x: %f \nstart1.y: %f\n", fdf->dots[0][0].x, fdf->dots[0][0].y);
 
 		render_fdf(&img, *fdf);
 
-		printf("acabou de rederizar");
 		mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 		mlx_loop(mlx);
 	}

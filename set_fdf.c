@@ -18,7 +18,6 @@ int	get_height_proportion(t_map map)
 		x = 0;
 		while (x < map.columns)
 		{
-			//TEST:
 			vol = (map.z[y][x] * 2) + x - y;
 			// cada edge da base tem h de altura e cada edge vertical tem 2h de altura.
 			// cada vez que o x aumenta, o volume aumenta junto.
@@ -59,7 +58,6 @@ double	get_edge_height(t_map *map)
 	edge_width = get_edge_width(edge_h * 2);
 	map->width = sqrt(pow((map->columns * (edge_width)), 2) + pow((map->rows * (edge_width)), 2)); 
 	// map->width = map->columns * edge_width + map->rows * edge_width; 
-	printf("map width: %f\n", map->width);
 	//raiz de (map.columns * edge_size) ao 2 + (map.rows * edge_size) ao 2;
 	if (map->width > WIN_WIDTH)
 	{
