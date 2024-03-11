@@ -59,10 +59,25 @@ typedef struct	s_data {
 	int		endian;
 }				t_data;
 
-void	print_tab(t_map *map);
+//generate_map.c
 int	gnl_len(char *file);
 int	count_tab(char *file);
 int	*tab_atoi(char **tab, int size);
-t_map	*generate_map(char *file);
 int	validate(char *file);
+t_map	*generate_map(char *file);
+//get_values.c
+int	get_height_proportion(t_map map);
+double	get_edge_width(double edge_size);
+double	get_edge_height(t_map *map);
+//set_fdf.c
+t_dot	**set_dots(t_fdf fdf, t_map map, t_edge *edge);
+void 	set_dots_volume(t_fdf *fdf, t_map map, t_edge edge);
+//render_fdf.c
+double	get_steps(double distance1, double distance2);
+int	line(double dist, double start, double end);
+void	render_line(t_data *img, t_dot start, t_dot end);
+void	render_fdf(t_data *img, t_fdf fdf);
+//window_actions.c
 void	open_win(int h, int w);
+//test.c
+void	print_tab(t_map *map);
