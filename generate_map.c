@@ -98,6 +98,7 @@ t_map	*generate_map(char *file)
 
 	if (!validate(file))
 		return (printf("Invalid file. Exiting."), NULL);
+	//TODO: init map
 	map = (t_map *)malloc(1 * sizeof(t_map));
 	map->rows = gnl_len(file);
 	map->z = (int **)malloc(map->rows * sizeof(int *));
