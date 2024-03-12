@@ -56,8 +56,8 @@ double	get_edge_height(t_map *map)
 	height_len = get_height_proportion(*map);
 	edge_h = WIN_HEIGHT / height_len;
 	edge_width = get_edge_width(edge_h * 2);
-	map->width = sqrt(pow((map->columns * (edge_width)), 2) + pow((map->rows * (edge_width)), 2)); 
-	// map->width = map->columns * edge_width + map->rows * edge_width; 
+	// map->width = sqrt(pow((map->columns * (edge_width)), 2) + pow((map->rows * (edge_width)), 2)); 
+	map->width = map->columns * edge_width + map->rows * edge_width; 
 	//raiz de (map.columns * edge_size) ao 2 + (map.rows * edge_size) ao 2;
 	if (map->width > WIN_WIDTH)
 	{

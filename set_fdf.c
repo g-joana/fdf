@@ -34,7 +34,8 @@ t_dot	**set_dots(t_fdf fdf, t_map map, t_edge *edge)
 	
 	edge->height = get_edge_height(&map);
 	edge->size = edge->height * 2;
-	edge->width = edge->height * sqrt(3);
+	// edge->width = (edge->size * sqrt(3))/2;
+	edge->width = get_edge_width(edge->height * 2);
 	// start = (WIN_WIDTH - (fdf->columns + fdf->rows * (edge / 2)) / 2);
 	//map_width = fdf->columns + fdf->rows;
 	count = 0;
@@ -49,6 +50,7 @@ t_dot	**set_dots(t_fdf fdf, t_map map, t_edge *edge)
 	//start
 	dots[row][col].x = (WIN_WIDTH - map.width) / 2;
 	dots[row][col].y = WIN_HEIGHT - (fdf.rows * edge->height);
+	// printf("ww: %f\nmw: %f\n", WIN_WIDTH, map.width);
 	col++;
 	while (row < fdf.rows)
 	{
