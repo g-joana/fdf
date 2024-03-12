@@ -2,37 +2,6 @@
 #include "libft/libft.h"
 #include "stdio.h"
 
-void	print_tab(t_map *map)
-{
-	int	count;
-	int	count2;
-
-	count = 0;
-	while(count < map->rows)
-	{
-		count2 = 0;
-		while(count2 < map->columns)
-		{
-			printf("%i ", map->z[count][count2]);
-			count2++;
-		}
-		printf("\n");
-		count++;
-	}
-}
-
-int	validate(char *file)
-{
-	int	fd;
-
-	if (ft_strstr(file, ".fdf") == NULL)
-		return (0);
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		return (0);
-	close(fd);
-	return (1);
-}
 /*
 int	main(int argc, char **argv)
 {

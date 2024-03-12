@@ -60,10 +60,10 @@ typedef struct	s_data {
 }				t_data;
 
 //generate_map.c
-int	gnl_len(char *file);
-int	count_tab(char *file);
-int	*tab_atoi(char **tab, int size);
 int	validate(char *file);
+int	gnl_len(char *file);
+int	get_row_len(char *line);
+int	*array_atoi(char **tab, int size);
 t_map	*generate_map(char *file);
 //get_values.c
 int	get_height_proportion(t_map map);

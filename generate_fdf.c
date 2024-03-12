@@ -1,5 +1,24 @@
 #include "fdf.h"
 
+void	print_tab(t_map *map)
+{
+	int	count;
+	int	count2;
+
+	count = 0;
+	while(count < map->rows)
+	{
+		count2 = 0;
+		while(count2 < map->columns)
+		{
+			printf("%i ", map->z[count][count2]);
+			count2++;
+		}
+		printf("\n");
+		count++;
+	}
+}
+
 void print_dots(t_fdf *fdf)
 {
 	int	count1;
@@ -21,8 +40,6 @@ void print_dots(t_fdf *fdf)
 
 int	main(int argc, char **argv)
 {
-	//int	y;
-	// int	x;
 	void	*mlx;
 	void	*mlx_win;
 	t_data	img;
@@ -38,14 +55,6 @@ int	main(int argc, char **argv)
 		img.img = mlx_new_image(mlx, WIN_WIDTH, WIN_HEIGHT);
 		img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 
-		//map = generate_map(map);
-		// y = 100;
-		// x = 100;
-		// while (x <= 400 && y <= 400)
-		// {
-		// 	my_mlx_pixel_put(&img, x, y, 0x00FF0000);
-		// 	x++;
-		// 	y++;
 
 		fdf = (t_fdf *)malloc(sizeof(t_fdf));
 		if (validate(argv[1]) == 0)
@@ -55,12 +64,8 @@ int	main(int argc, char **argv)
 			return (1);
 		fdf->rows = map->rows;
 		fdf->columns = map->columns;
-		// print_tab(map);
-		//	generate fdf
 		fdf->dots = set_dots(*fdf, *map, &edge);
 		set_dots_volume(fdf, *map, edge);
-		// print_dots(fdf);
-		// printf("start1.x: %f \nstart1.y: %f\n", fdf->dots[0][0].x, fdf->dots[0][0].y);
 
 		render_fdf(&img, *fdf);
 

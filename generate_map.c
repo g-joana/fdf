@@ -1,6 +1,19 @@
 #include "libft/libft.h"
 #include "fdf.h"
 
+int	validate(char *file)
+{
+	int	fd;
+
+	if (ft_strstr(file, ".fdf") == NULL)
+		return (0);
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (0);
+	close(fd);
+	return (1);
+}
+
 int	gnl_len(char *file)
 {
 	int	fd;
@@ -13,7 +26,6 @@ int	gnl_len(char *file)
 	while (line)
 	{
 		len++;
-		printf("len: %i | line: %s\n", len, line);
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -21,22 +33,22 @@ int	gnl_len(char *file)
 	return (len);
 }
 
-int	count_gnl_numbers(char *gnl)
+int	get_row_len(char *line)
 {
 	int	len;
 	int	number;
 
 	len = 0;
 	number = 0;
-	while (gnl[len] && gnl[len] != '\n' && gnl[len] != '\0')
+	while (line[len] && line[len] != '\n' && line[len] != '\0')
 	{
-		while (gnl[len] == ' ')
+		while (line[len] == ' ')
 			len++;
-		if (gnl[len] == '\0' || gnl[len] == '\n')
+		if (line[len] == '\0' || line[len] == '\n')
 			break ;
-		while (gnl[len] != ' ')
+		while (line[len] != ' ')
 		{	
-			if (gnl[len + 1] == '\0' || gnl[len + 1] == '\n' || gnl[len + 1] == ' ')
+			if (line[len + 1] == '\0' || line[len + 1] == '\n' || line[len + 1] == ' ')
 			{	
 				len++;
 				number++;
@@ -48,41 +60,33 @@ int	count_gnl_numbers(char *gnl)
 	return (number);
 }
 
-int	tab_len(char **tab)
+int	*array_atoi(char **split, int size)
 {
-	int	len;
-
-	len = 0;
-	while (tab && tab[len])
-	{
-		if (tab[len][0] == '\n' || tab[len][0] == '\0')
-			break ;
-		len++;
-	}
-	return (len);
-}
-
-int	*tab_atoi(char **tab, int size)
-{
-	int	*atoi_tab;
+	int	*nbr_row;
 	int	count;
 	int	len;
 
-	count = 0;
-	len = tab_len(tab);
-	if (size == 0)
-		return (0);
-	atoi_tab = (int *)malloc(len * sizeof(int));
-	while (tab && tab[count])
+	len = 0;
+	while (split && split[len])
 	{
-		if (tab[count][0] == '\n' || tab[count][0] == '\0')
+		if (split[len][0] == '\n' || split[len][0] == '\0')
 			break ;
-		atoi_tab[count] = ft_atoi(tab[count]);
-		free(tab[count]);
+		len++;
+	}
+	if (len != size || len < 2)
+		return (0);
+	nbr_row = (int *)malloc(len * sizeof(int));
+	count = 0;
+	while (split && split[count])
+	{
+		if (split[count][0] == '\n' || split[count][0] == '\0')
+			break ;
+		nbr_row[count] = ft_atoi(split[count]);
+		free(split[count]);
 		count++;
 	}
-	free(tab);
-	return (atoi_tab);
+	free(split);
+	return (nbr_row);
 }
 
 t_map	*generate_map(char *file)
@@ -92,30 +96,24 @@ t_map	*generate_map(char *file)
 	char	*line;
 	t_map	*map;
 
-	count = 0;
+	if (!validate(file))
+		return (printf("Invalid file. Exiting."), NULL);
 	map = (t_map *)malloc(1 * sizeof(t_map));
-	fd = open(file, O_RDONLY);
 	map->rows = gnl_len(file);
 	map->z = (int **)malloc(map->rows * sizeof(int *));
-	// printf("map rows: %i\n", map->rows);
-	line = get_next_line(fd);
-	map->columns = count_gnl_numbers(line);
+	count = 0;
+	fd = open(file, O_RDONLY);
 	while (count < map->rows)
 	{
-		map->z[count] = (int *)malloc(map->columns * sizeof(int));
-		map->z[count] = tab_atoi(ft_split(line, ' '), map->columns);
-		if (map->z[count] == 0)
-		{
-			//printf("linha: %i\n", count);
-			printf("%s\n", "Found wrong line length. Exiting.");
-			return (NULL);
-		}
-		free(line);
 		line = get_next_line(fd);
+		if (count == 0)
+			map->columns = get_row_len(line);
+		map->z[count] = array_atoi(ft_split(line, ' '), map->columns);
+		if (map->z[count] == 0)
+			return (printf("Found wrong line length. Exiting."), NULL);
+		free(line);
 		count++;
 	}
-	//map->rows = count;
-	free(line);
 	close(fd);
 	return (map);
 }
