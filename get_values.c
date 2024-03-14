@@ -1,6 +1,5 @@
 #include "fdf.h"
 
-//	calcula  (em quantidade de edge_h)
 int	get_height_proportion(t_map map)
 {
 	int	y;
@@ -46,6 +45,20 @@ double	get_edge_width(double edge_size)
 	return (edge_width);
 }
 
+
+
+/*
+
+   60
+e   .              edge_size
+d   |   .         (2 * edge_h)
+g   |         .
+e   |               .
+-   |_                    .
+h   |_|____________________(___. 30
+   90         edge_w
+
+*/
 double	get_edge_height(t_map *map)
 {	
 	double	edge_h;
@@ -57,15 +70,16 @@ double	get_edge_height(t_map *map)
 	edge_h = WIN_HEIGHT / height_len;
 	edge_width = get_edge_width(edge_h * 2);
 	// map->width = sqrt(pow((map->columns * (edge_width)), 2) + pow((map->rows * (edge_width)), 2)); 
-	map->width = map->columns * edge_width + map->rows * edge_width; 
+	map->width = (map->columns + map->rows) * edge_width; 
 	//raiz de (map.columns * edge_size) ao 2 + (map.rows * edge_size) ao 2;
-	if (map->width > WIN_WIDTH)
+	if (map->width > WIN_HEIGHT)
 	{
 		proportion = map->width / WIN_WIDTH;
 		map->width = map->width / proportion;
 		map->new_height = WIN_HEIGHT / proportion;
 		edge_h = map->new_height / height_len;
 	}
+	// else if ()
 	return (edge_h);
 }
 
