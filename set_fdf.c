@@ -7,10 +7,10 @@ void 	set_dots_volume(t_fdf *fdf, t_map map, double edge_size)
 
 	row = 0;
 	col = 0;
-	while (row < fdf->rows)
+	while (row < map.rows)
 	{
 		col = 0;
-		while (col < fdf->columns)
+		while (col < map.columns)
 		{
 			fdf->dots[row][col].y -= map.z[row][col] * edge_size;
 			col++;
@@ -51,19 +51,7 @@ t_dot	**set_dots(t_fdf fdf, t_map map, t_edge edge)
 	int	row;
 	int	col;
 	t_dot	**dots;
-	// t_edge	*edge;
-	
-	// edge = set_edge(map);
-	//dots = malloc_dots(map);
-	//
-	// edge = (t_edge *)malloc(sizeof(t_edge));
-	// edge->height = get_edge_height(&map);
-	// edge->size = edge->height * 2;
-	// // edge->width = edge->height * sqrt(3);
-	// edge->width = get_edge_width(edge->size);
-	//
-	// start = (WIN_WIDTH - (fdf->columns + fdf->rows * (edge / 2)) / 2);
-	//map_width = fdf->columns + fdf->rows;
+
 	count = 0;
 	dots = (t_dot **)malloc(fdf.rows * sizeof(t_dot *));
 	while (count < fdf.rows)
@@ -102,7 +90,6 @@ t_fdf	*set_fdf(t_map map)
 	t_fdf	*fdf;
 	t_edge	*edge;
 
-	// edge_size = 2 * get_edge_height(&map);
 	fdf = (t_fdf *)malloc(sizeof(t_fdf));
 	if (!fdf)
 		return (NULL);

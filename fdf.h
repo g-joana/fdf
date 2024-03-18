@@ -27,27 +27,15 @@ typedef struct	s_edge {
 }	t_edge;
 
 typedef struct	s_map {
-	int	columns;
 	int	rows;
+	int	columns;
 	int	**z;
-	double	width;
-	double	new_height;
 }	t_map;
 
 typedef struct	s_fdf {
-	int	columns;
 	int	rows;
-	int	**z;
+	int	columns;
 	t_dot	**dots;
-
-	//int	*start_vertice;
-	//int	*end_vertice;
-
-	//int	lowest_vol;
-	//int	highest_vol;
-	int	map_height;
-
-	// int	edge_size;
 }	t_fdf;
 
 
