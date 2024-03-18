@@ -20,21 +20,36 @@ void 	set_dots_volume(t_fdf *fdf, t_map map, double edge_size)
 	return ;
 }
 
-// t_edge	set_edge()
+t_edge	*set_edge(t_map map)
+{
+	t_edge *edge;
+
+	edge = (t_edge *)malloc(sizeof(t_edge));
+	edge->height = get_edge_height(&map);
+	edge->size = edge->height * 2;
+	edge->width = get_edge_width(edge->size);
+	return (edge);
+}
 
 // t_dots	**malloc_dots()
 
 //	a partir do edge_size e do mapa, define o par ordenado de cada ponto do fdf
-t_dot	**set_dots(t_fdf fdf, t_map map, t_edge *edge)
+t_dot	**set_dots(t_fdf fdf, t_map map)
 {
 	int	count;
 	int	row;
 	int	col;
 	t_dot	**dots;
+	t_edge	*edge;
 	
+	// edge = set_edge(map);
+	//dots = malloc_dots(map);
+	//
+	edge = (t_edge *)malloc(sizeof(t_edge));
 	edge->height = get_edge_height(&map);
 	edge->size = edge->height * 2;
 	edge->width = edge->height * sqrt(3);
+	//
 	// start = (WIN_WIDTH - (fdf->columns + fdf->rows * (edge / 2)) / 2);
 	//map_width = fdf->columns + fdf->rows;
 	count = 0;
@@ -67,21 +82,19 @@ t_dot	**set_dots(t_fdf fdf, t_map map, t_edge *edge)
 		}
 		row++;
 	}
+	set_dots_volume(&fdf, map, edge->size);
 	return (dots);
 }
 
 t_fdf	*set_fdf(t_map map)
 {
 	t_fdf	*fdf;
-	t_edge	*edge;
 
 	fdf = (t_fdf *)malloc(sizeof(t_fdf));
 	if (!fdf)
 		return (NULL);
 	fdf->rows = map.rows;
 	fdf->columns = map.columns;
-	edge = (t_edge *)malloc(sizeof(t_edge));
-	fdf->dots = set_dots(*fdf, map, edge);
-	set_dots_volume(fdf, map, edge->size);
+	fdf->dots = set_dots(*fdf, map);
 	return (fdf);
 }
