@@ -70,7 +70,7 @@ int	get_height_proportion(t_map map);
 double	get_edge_width(double edge_size);
 double	get_edge_height(t_map *map);
 //set_fdf.c
-t_dot	**set_dots(t_fdf fdf, t_map map);
+t_dot	**set_dots(t_fdf fdf, t_map map, t_edge edge);
 void 	set_dots_volume(t_fdf *fdf, t_map map, double edge_size);
 t_fdf	*set_fdf(t_map map);
 //render_fdf.c

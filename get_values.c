@@ -46,29 +46,6 @@ double	get_edge_width(double edge_size)
 	return (edge_width);
 }
 
-double	get_edge_height(t_map *map)
-{	
-	double	edge_h;
-	double	edge_width;
-	int	height_len;
-	double	proportion;
-
-	height_len = get_height_proportion(*map);
-	edge_h = WIN_HEIGHT / height_len;
-	edge_width = get_edge_width(edge_h * 2);
-	// map->width = sqrt(pow((map->columns * (edge_width)), 2) + pow((map->rows * (edge_width)), 2)); 
-	map->width = map->columns + map->rows * edge_width;
-	//raiz de (map.columns * edge_size) ao 2 + (map.rows * edge_size) ao 2;
-	if (map->width > WIN_WIDTH)
-	{
-		proportion = map->width / WIN_WIDTH;
-		map->width = map->width / proportion;
-		map->new_height = WIN_HEIGHT / proportion;
-		edge_h = map->new_height / height_len;
-	}
-	return (edge_h);
-}
-
 // hipotenusa = edge size
 // cateto op = edge height
 // cateto adj = edge width
