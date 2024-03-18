@@ -82,19 +82,21 @@ t_dot	**set_dots(t_fdf fdf, t_map map)
 		}
 		row++;
 	}
-	set_dots_volume(&fdf, map, edge->size);
 	return (dots);
 }
 
 t_fdf	*set_fdf(t_map map)
 {
 	t_fdf	*fdf;
+	double	edge_size;
 
+	edge_size = 2 * get_edge_height(&map);
 	fdf = (t_fdf *)malloc(sizeof(t_fdf));
 	if (!fdf)
 		return (NULL);
 	fdf->rows = map.rows;
 	fdf->columns = map.columns;
 	fdf->dots = set_dots(*fdf, map);
+	set_dots_volume(fdf, map, edge_size);
 	return (fdf);
 }

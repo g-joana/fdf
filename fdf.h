@@ -47,7 +47,7 @@ typedef struct	s_fdf {
 	//int	highest_vol;
 	int	map_height;
 
-	int	edge_size;
+	// int	edge_size;
 }	t_fdf;
 
 
