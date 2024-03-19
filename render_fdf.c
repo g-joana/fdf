@@ -38,7 +38,8 @@ double	get_proportion(double distance1, double distance2)
 	return (proportion * negative);
 }
 
-// verifica se é uma linha e se é válida
+// verifica se a linha foi desenhada por completo, comparando as coordenadas do pixel que será desenhado com as coordenadas que marcam o fim da linha.
+// retorna 1 se não for um pixel válido (se estiver fora da linha ou da tela)
 int	line(double dist, double start, double end, char axis)
 {
 	if ((start < 0)

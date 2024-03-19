@@ -35,6 +35,7 @@ int	get_height_proportion(t_map map)
 	return (highest_h - lowest_h);
 }
 
+//TODO: checar contas
 double	get_edge_width(double edge_size)
 {
 	double	edge_width;
