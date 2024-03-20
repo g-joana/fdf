@@ -6,6 +6,47 @@ t_fdf	*set_fdf()
 {
 }
 */
+
+
+void	free_z(int rows, int **z)
+{
+	int	row;
+
+	row = 0;
+	while (row < rows)
+	{
+		free(z[row]);
+		row++;
+	}
+	free(z);
+}
+
+void	free_dots(int rows, t_dot **dots)
+{
+	int	row;
+
+	row = 0;
+	while (row < rows)
+	{
+		free(dots[row]);
+		row++;
+	}
+	free(dots);
+}
+
+int	key_hook(int key, t_fdf *fdf)
+{
+	if (key == 65307)
+	{
+		mlx_destroy_image(fdf->img);
+		mlx_destroy_window(fdf->mlx_win);
+		mlx_destroy_display(fdf->mlx);
+		destroy_fdf(fdf);
+	}
+	return (0);
+	(void)fdf;
+}
+
 int	main(int argc, char **argv)
 {
 	void	*mlx;
@@ -28,8 +69,15 @@ int	main(int argc, char **argv)
 	if (map == NULL)
 		return (1);
 	fdf = set_fdf(*map);
+	
+	free_z(map->rows, map->z);
+	free(map);
+	
+	mlx_key_hook(mlx_win, key_hook, fdf);
 	render_fdf(&img, *fdf);
-
+	
+	free_dots(fdf->rows, fdf->dots);
+	free(fdf);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 	//destroy fdf

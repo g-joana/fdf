@@ -115,6 +115,5 @@ t_fdf	*set_fdf(t_map map)
 	fdf->columns = map.columns;
 	set_dots_volume(fdf, map, edge->size);
 	free(edge);
-	// free(map);
 	return (fdf);
 }
