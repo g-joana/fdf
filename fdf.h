@@ -15,6 +15,14 @@
 # define WIN_HEIGHT 600.0
 #endif
 
+typedef struct	s_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}				t_data;
+
 typedef struct	s_dot {
 	double	x;
 	double	y;
@@ -36,16 +44,12 @@ typedef struct	s_fdf {
 	int	rows;
 	int	columns;
 	t_dot	**dots;
+
+	void	*mlx;
+	void	*mlx_win;
+	t_data	img;
+	t_map	*map;
 }	t_fdf;
-
-
-typedef struct	s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}				t_data;
 
 //generate_map.c
 int	validate(char *file);

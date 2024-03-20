@@ -74,7 +74,7 @@ void	render_line(t_data *img, t_dot start, t_dot end)
 	
 	while (!line(x_distance, start.x, end.x, 'x') && !line(y_distance, start.y, end.y, 'y'))
 	{
-		my_mlx_pixel_put(img, start.x, start.y, 0xFF79C6);
+		my_mlx_pixel_put(img, start.x, start.y, 0x48E448);
 		start.x += x_steps;
 		start.y += y_steps;
 	}

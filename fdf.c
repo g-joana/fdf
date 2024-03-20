@@ -38,29 +38,34 @@ int	key_hook(int key, t_fdf *fdf)
 {
 	if (key == 65307)
 	{
-		mlx_destroy_image(fdf->img);
-		mlx_destroy_window(fdf->mlx_win);
+		mlx_destroy_image(fdf->mlx, fdf->img.img);
+		mlx_destroy_window(fdf->mlx, fdf->mlx_win);
 		mlx_destroy_display(fdf->mlx);
-		destroy_fdf(fdf);
+		free_dots(fdf->rows, fdf->dots);
+		free(fdf->mlx);
+		free(fdf);
+		// destroy_fdf(fdf);
+		exit(1);
 	}
-	return (0);
+	// return (0);
 	(void)fdf;
+	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	void	*mlx;
-	void	*mlx_win;
-	t_data	img;
+	// void	*mlx;
+	// void	*mlx_win;
+	// t_data	img;
 	t_map	*map;
 	t_fdf	*fdf;
 
 	if (argc != 2)
 		return (printf("Invalid input."), 1);
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
-	img.img = mlx_new_image(mlx, WIN_WIDTH, WIN_HEIGHT);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+	// mlx = mlx_init();
+	// mlx_win = mlx_new_window(mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
+	// img.img = mlx_new_image(mlx, WIN_WIDTH, WIN_HEIGHT);
+	// img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	
 	//listen window
 	//actions
@@ -73,13 +78,13 @@ int	main(int argc, char **argv)
 	free_z(map->rows, map->z);
 	free(map);
 	
-	mlx_key_hook(mlx_win, key_hook, fdf);
-	render_fdf(&img, *fdf);
+	mlx_key_hook(fdf->mlx_win, key_hook, fdf);
+	render_fdf(&fdf->img, *fdf);
 	
-	free_dots(fdf->rows, fdf->dots);
-	free(fdf);
-	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
-	mlx_loop(mlx);
+	// free_dots(fdf->rows, fdf->dots);
+	// free(fdf);
+	mlx_put_image_to_window(fdf->mlx, fdf->mlx_win, fdf->img.img, 0, 0);
+	mlx_loop(fdf->mlx);
 	//destroy fdf
 }
 

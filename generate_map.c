@@ -85,6 +85,7 @@ int	*array_atoi(char **split, int size)
 		free(split[count]);
 		count++;
 	}
+	free(split[count]);
 	free(split);
 	return (nbr_row);
 }
@@ -115,6 +116,9 @@ t_map	*generate_map(char *file)
 		free(line);
 		count++;
 	}
+	line = get_next_line(fd);
+	if (line)
+		free(line);
 	close(fd);
 	return (map);
 }
