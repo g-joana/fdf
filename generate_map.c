@@ -146,7 +146,7 @@ t_map	*generate_map(char *file)
 
 	if (!validate(file))
 	{	
-		printf("Invalid file. Exiting.");
+		ft_putstr_fd("Invalid file. Exiting.", 2);
 		return (NULL);
 	}
 	map = (t_map *)malloc(1 * sizeof(t_map));
