@@ -47,18 +47,35 @@ double	get_edge_width(double edge_size)
 	return (edge_width);
 }
 
+// define distâncias entre os pontos baseado no tamanho do mapa e janela. retorna em t_edge
+t_edge	*set_edge(t_map map)
+{
+	t_edge *edge;
+	int	height_len;
+	double	map_width;
+	double	map_height;
+
+	height_len = get_height_proportion(map);
+	edge = (t_edge *)malloc(sizeof(t_edge));
+	if (!edge)
+		return (NULL);
+	edge->height = WIN_HEIGHT / height_len;
+	edge->size = edge->height * 2;
+	// edge->width = get_edge_width(edge->size);
+	edge->width = edge->height * sqrt(3);
+	map_width = (map.columns + map.rows) * edge->width;
+	if (map_width > WIN_WIDTH)
+	{
+		map_height = (WIN_HEIGHT * WIN_WIDTH) / map_width;
+		map_width = WIN_WIDTH;
+		edge->height = map_height / height_len;
+		edge->size = edge->height * 2;
+		// edge->width = get_edge_width(edge->size);
+		edge->width = edge->height * sqrt(3);
+	}
+	return (edge);
+}
 // hipotenusa = edge size
 // cateto op = edge height
 // cateto adj = edge width
 // angulo - 30 graus
-/*
-void	get_edge_size(t_edge *edge)
-{
-	double radians;
-
-	radians = 30.0 * (M_PI / 180.0);
-	edge->size = edge->height / sin(radians);
-	// printf("30 * (%f / 180) = %f\n", M_PI, radians);
-	// printf("edge->size = %f / %f\n", edge->height, sin(radians));
-}
-*/
