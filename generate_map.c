@@ -60,6 +60,18 @@ int	get_row_len(char *line)
 	return (number);
 }
 
+void	free_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i]) {
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
+
 int	*array_atoi(char **split, int size)
 {
 	int	*nbr_row;
@@ -74,7 +86,10 @@ int	*array_atoi(char **split, int size)
 		len++;
 	}
 	if (len != size || len < 2)
+	{
+		free_split(split);
 		return (0);
+	}
 	nbr_row = (int *)malloc(len * sizeof(int));
 	count = 0;
 	while (split && split[count])
@@ -90,19 +105,12 @@ int	*array_atoi(char **split, int size)
 	return (nbr_row);
 }
 
-t_map	*generate_map(char *file)
+int	fill_map_rows(t_map *map, char *file)
 {
 	int	fd;
 	int	count;
 	char	*line;
-	t_map	*map;
 
-	if (!validate(file))
-		return (printf("Invalid file. Exiting."), NULL);
-	//TODO: init map
-	map = (t_map *)malloc(1 * sizeof(t_map));
-	map->rows = gnl_len(file);
-	map->z = (int **)malloc(map->rows * sizeof(int *));
 	count = 0;
 	fd = open(file, O_RDONLY);
 	while (count < map->rows)
@@ -112,7 +120,16 @@ t_map	*generate_map(char *file)
 			map->columns = get_row_len(line);
 		map->z[count] = array_atoi(ft_split(line, ' '), map->columns);
 		if (map->z[count] == 0)
-			return (printf("Found wrong line length. Exiting."), NULL);
+		{
+			while (line)
+			{
+				free(line);
+				line = get_next_line(fd);
+			}
+			free_z(count + 1, map->z);
+			free(map);
+			return (0);
+		}
 		free(line);
 		count++;
 	}
@@ -120,5 +137,25 @@ t_map	*generate_map(char *file)
 	if (line)
 		free(line);
 	close(fd);
+	return (1);
+}
+
+t_map	*generate_map(char *file)
+{
+	t_map	*map;
+
+	if (!validate(file))
+	{	
+		printf("Invalid file. Exiting.");
+		return (NULL);
+	}
+	map = (t_map *)malloc(1 * sizeof(t_map));
+	map->rows = gnl_len(file);
+	map->z = (int **)malloc(map->rows * sizeof(int *));
+	if (!fill_map_rows(map, file))
+	{
+		ft_putstr_fd("Found wrong line length. Exiting.\n", 2);
+		return (NULL);
+	}
 	return (map);
 }

@@ -51,6 +51,8 @@ typedef struct	s_fdf {
 	t_map	*map;
 }	t_fdf;
 
+//fdf.c
+void	free_z(int rows, int **z);
 //generate_map.c
 int	validate(char *file);
 int	gnl_len(char *file);
