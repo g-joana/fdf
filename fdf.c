@@ -54,6 +54,18 @@ int	key_hook(int key, t_fdf *fdf)
 	return (0);
 }
 
+int	mouse_hook(t_fdf *fdf)
+{
+	mlx_destroy_image(fdf->mlx, fdf->img.img);
+	mlx_destroy_window(fdf->mlx, fdf->mlx_win);
+	mlx_destroy_display(fdf->mlx);
+	free_dots(fdf->rows, fdf->dots);
+	free(fdf->mlx);
+	free(fdf);
+	exit(1);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_map	*map;
@@ -77,6 +89,7 @@ int	main(int argc, char **argv)
 	free_z(map->rows, map->z);
 	free(map);
 	mlx_key_hook(fdf->mlx_win, key_hook, fdf);
+	mlx_hook(fdf->mlx_win, 17, 1L<<17, mouse_hook, fdf);
 	render_fdf(&fdf->img, *fdf);
 	mlx_put_image_to_window(fdf->mlx, fdf->mlx_win, fdf->img.img, 0, 0);
 	mlx_loop(fdf->mlx);
