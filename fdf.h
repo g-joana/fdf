@@ -71,6 +71,7 @@ int	get_height_proportion(t_map map);
 // double	get_edge_width(double edge_size);
 t_edge	*set_edge(t_map map);
 //set_fdf.c
+void	start_mlx(t_fdf *fdf)
 void 	set_dots_volume(t_fdf *fdf, t_map map, double edge_size);
 t_dot	**malloc_dots(t_map map);
 t_dot	**set_dots(t_map map, t_edge edge);

@@ -79,6 +79,16 @@ t_dot	**set_dots(t_map map, t_edge edge)
 	return (dots);
 }
 
+void	start_mlx(t_fdf *fdf)
+{
+	fdf->mlx = mlx_init();
+	fdf->mlx_win = mlx_new_window(fdf->mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
+	fdf->img.img = mlx_new_image(fdf->mlx, WIN_WIDTH, WIN_HEIGHT);
+	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bits_per_pixel, &fdf->img.line_length, &fdf->img.endian);
+	mlx_key_hook(fdf->mlx_win, key_hook, fdf);
+	mlx_hook(fdf->mlx_win, 17, 1L<<17, mouse_hook, fdf);
+}
+
 t_fdf	*set_fdf(t_map map)
 {
 	t_fdf	*fdf;
@@ -87,10 +97,7 @@ t_fdf	*set_fdf(t_map map)
 	fdf = (t_fdf *)malloc(sizeof(t_fdf));
 	if (!fdf)
 		return (NULL);
-	fdf->mlx = mlx_init();
-	fdf->mlx_win = mlx_new_window(fdf->mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
-	fdf->img.img = mlx_new_image(fdf->mlx, WIN_WIDTH, WIN_HEIGHT);
-	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bits_per_pixel, &fdf->img.line_length, &fdf->img.endian);
+	start_mlx(fdf);
 	edge = set_edge(map);
 	if (!edge)
 		return (NULL);

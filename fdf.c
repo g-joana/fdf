@@ -13,17 +13,18 @@ int	validate(char *file)
 	return (1);
 }
 
-void	free_z(int rows, int **z)
+void	destroy_map(t_map *map)
 {
 	int	row;
 
 	row = 0;
 	while (row < rows)
 	{
-		free(z[row]);
+		free(map->z[row]);
 		row++;
 	}
-	free(z);
+	free(map->z);
+	free(map);
 }
 
 void	free_dots(int rows, t_dot **dots)
@@ -54,6 +55,18 @@ int	key_hook(int key, t_fdf *fdf)
 	return (0);
 }
 
+int	mouse_hook(t_fdf *fdf)
+{
+	mlx_destroy_image(fdf->mlx, fdf->img.img);
+	mlx_destroy_window(fdf->mlx, fdf->mlx_win);
+	mlx_destroy_display(fdf->mlx);
+	free_dots(fdf->rows, fdf->dots);
+	free(fdf->mlx);
+	free(fdf);
+	exit(1);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_map	*map;
@@ -73,11 +86,11 @@ int	main(int argc, char **argv)
 	if (map == NULL)
 		return (1);
 	fdf = set_fdf(*map);
-	//set ou init mlx
-	free_z(map->rows, map->z);
-	free(map);
-	mlx_key_hook(fdf->mlx_win, key_hook, fdf);
+	start_mlx(fdf);
+	destroy_map(map);
 	render_fdf(&fdf->img, *fdf);
+	free_dots(fdf->rows, fdf->dots);
+	free(fdf);
 	mlx_put_image_to_window(fdf->mlx, fdf->mlx_win, fdf->img.img, 0, 0);
 	mlx_loop(fdf->mlx);
 }
