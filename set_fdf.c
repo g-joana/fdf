@@ -1,6 +1,5 @@
 #include "fdf.h"
 
-// aplica altura dos pontos, eixo z
 void 	set_dots_volume(t_fdf *fdf, t_map map, double edge_size)
 {
 	int	col;
@@ -22,7 +21,6 @@ void 	set_dots_volume(t_fdf *fdf, t_map map, double edge_size)
 }
 
 
-// malloca matriz de par ordenado
 t_dot	**malloc_dots(t_map map)
 {
 	int	count;
@@ -47,7 +45,6 @@ t_dot	**malloc_dots(t_map map)
 	return (dots);
 }
 
-//	a partir do edge(distância entre pontos) e do mapa, define e retorna a matriz do par ordenado de cada ponto do fdf
 t_dot	**set_dots(t_map map, t_edge edge)
 {
 	int	row;
@@ -59,7 +56,6 @@ t_dot	**set_dots(t_map map, t_edge edge)
 	dots = malloc_dots(map);
 	if (!dots)
 		return (NULL);
-	// dots[row][col] = get_start(map, edge);
 	dots[row][col].x = (WIN_WIDTH - ((map.columns + map.rows - 2) * edge.width)) / 2;
 	dots[row][col].y = WIN_HEIGHT - ((map.rows - 1) * edge.height);
 	col++;
@@ -83,7 +79,6 @@ t_dot	**set_dots(t_map map, t_edge edge)
 	return (dots);
 }
 
-// define e retorna(em t_fdf) tudo necessário para renderizar o fdf
 t_fdf	*set_fdf(t_map map)
 {
 	t_fdf	*fdf;

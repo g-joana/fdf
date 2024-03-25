@@ -1,6 +1,5 @@
 #include "fdf.h"
 
-// renderiza pixel
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dest;
@@ -9,7 +8,6 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dest = color;
 }
 
-//	a partir da distância entre um ponto e outro de cada eixo, calcula e retorna o tamanho a ser incrementado no valor inicial para fazer essa linha
 double	get_steps(double distance1, double distance2)
 {
 	double	proportion;
@@ -38,8 +36,6 @@ double	get_steps(double distance1, double distance2)
 	return (proportion * negative);
 }
 
-// verifica se a linha foi desenhada por completo, comparando as coordenadas do pixel que será desenhado com as coordenadas que marcam o fim da linha.
-// retorna 1 se não for um pixel válido (se estiver fora da linha ou da tela)
 int	line(double dist, double start, double end, char axis)
 {
 	if ((start < 0)
@@ -59,7 +55,6 @@ int	line(double dist, double start, double end, char axis)
 	return (0);
 }
 
-// renderiza a linha na imagem
 void	render_line(t_data *img, t_dot start, t_dot end)
 {
 	double	x_distance;
@@ -80,7 +75,6 @@ void	render_line(t_data *img, t_dot start, t_dot end)
 	}
 }
 
-// renderiza todas as linhas aplicando o valor do eixo z nos pontos
 void	render_fdf(t_data *img, t_fdf fdf)
 {
 	int	row;

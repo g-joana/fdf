@@ -1,6 +1,5 @@
 #include "fdf.h"
 
-//	calcula  (em quantidade de edge_h)
 int	get_height_proportion(t_map map)
 {
 	int	y;
@@ -19,10 +18,6 @@ int	get_height_proportion(t_map map)
 		while (x < map.columns)
 		{
 			vol = (map.z[y][x] * 2) + x - y;
-			// cada edge da base tem h de altura e cada edge vertical tem 2h de altura.
-			// cada vez que o x aumenta, o volume aumenta junto.
-			// aumentar: aumentar seria subir(-) na tela(eixo y), pois sua origem mudaria.
-			// por fim, o volume sobreescreve o volume inicial (so a base) contando com os relevos, caso tenha algum que passe essa altura
 			if (vol > highest_h)
 				highest_h = vol;
 			if (vol < lowest_h)
@@ -35,19 +30,26 @@ int	get_height_proportion(t_map map)
 	return (highest_h - lowest_h);
 }
 
-//TODO: checar contas
-double	get_edge_width(double edge_size)
+double	get_edge_width(double edge_size, int degrees)
 {
 	double	edge_width;
-	double	radians;
 
-	radians = 30.0 * (M_PI / 180.0);
-	edge_width = edge_size / cos(radians);
+	edge_width = edge_size * cos(degrees * (M_PI / 180.0));
 
 	return (edge_width);
 }
 
-// define distâncias entre os pontos baseado no tamanho do mapa e janela. retorna em t_edge
+/*
+   60
+e   .              edge_size
+d   |   .         (2 * edge_h)
+g   |         .
+e   |               .
+-   |_                    .
+h   |_|____________________(___. 30
+   90         edge_w
+
+*/
 t_edge	*set_edge(t_map map)
 {
 	t_edge *edge;
@@ -61,8 +63,7 @@ t_edge	*set_edge(t_map map)
 		return (NULL);
 	edge->height = WIN_HEIGHT / height_len;
 	edge->size = edge->height * 2;
-	// edge->width = get_edge_width(edge->size);
-	edge->width = edge->height * sqrt(3);
+	edge->width = get_edge_width(edge->size, 30.0);
 	map_width = (map.columns + map.rows) * edge->width;
 	if (map_width > WIN_WIDTH)
 	{
@@ -70,12 +71,7 @@ t_edge	*set_edge(t_map map)
 		map_width = WIN_WIDTH;
 		edge->height = map_height / height_len;
 		edge->size = edge->height * 2;
-		// edge->width = get_edge_width(edge->size);
-		edge->width = edge->height * sqrt(3);
+		edge->width = get_edge_width(edge->size, 30.0);
 	}
 	return (edge);
 }
-// hipotenusa = edge size
-// cateto op = edge height
-// cateto adj = edge width
-// angulo - 30 graus
