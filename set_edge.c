@@ -17,7 +17,7 @@ int	get_height_proportion(t_map map)
 		x = 0;
 		while (x < map.columns)
 		{
-			vol = (map.z[y][x] * 2) + x - y;
+			vol = (map.z[y][x] * 3) + x - y;
 			if (vol > highest_h)
 				highest_h = vol;
 			if (vol < lowest_h)
@@ -60,16 +60,16 @@ t_edge	*set_edge(t_map map)
 	if (!edge)
 		return (NULL);
 	edge->height = WIN_HEIGHT / height_len;
-	edge->size = edge->height * 2;
-	edge->width = get_edge_width(edge->size, 30.0);
+	edge->size = edge->height * 3;
+	edge->width = get_edge_width(edge->height * 2, 30.0);
 	map_width = (map.columns + map.rows) * edge->width;
 	if (map_width > WIN_WIDTH)
 	{
 		map_height = (WIN_HEIGHT * WIN_WIDTH) / map_width;
 		map_width = WIN_WIDTH;
 		edge->height = map_height / height_len;
-		edge->size = edge->height * 2;
-		edge->width = get_edge_width(edge->size, 30.0);
+		edge->size = edge->height * 3;
+		edge->width = get_edge_width(edge->height * 2, 30.0);
 	}
 	return (edge);
 }
