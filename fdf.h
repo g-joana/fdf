@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 18:53:58 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/27 18:53:58 by jgils            ###   ########.fr       */
+/*   Created: 2024/03/27 20:53:58 by jgils             #+#    #+#             */
+/*   Updated: 2024/03/27 20:53:58 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ typedef struct s_map
 	int		rows;
 	int		columns;
 	int		**z;
+	int		highest_z;
+	int		lowest_z;
 }			t_map;
 
 typedef struct s_fdf
@@ -84,8 +86,8 @@ int			fill_map_rows(t_map *map, int fd);
 int			*array_atoi(char **tab, int size);
 t_map		*generate_map(char *file);
 // set_edge.c
-int			get_height_proportion(t_map map);
-// double	get_edge_width(double edge_size);
+double	get_edge_width(double edge_size, int degrees);
+void		set_z_limits(t_map *map);
 t_edge		*set_edge(t_map map);
 // set_fdf.c
 void		set_z(t_dot **dots, t_map map, double edge_size);
@@ -102,3 +104,5 @@ void		render_fdf(t_data *img, t_fdf fdf);
 int	key_hook(int key, t_fdf *fdf);
 int	mouse_hook(t_fdf *fdf);
 void	start_mlx(t_fdf *fdf);
+// utils.c
+int	absolute(int value);

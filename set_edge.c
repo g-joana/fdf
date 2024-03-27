@@ -5,40 +5,37 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 18:54:41 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/27 18:54:41 by jgils            ###   ########.fr       */
+/*   Created: 2024/03/27 20:43:03 by jgils             #+#    #+#             */
+/*   Updated: 2024/03/27 20:45:04 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	get_height_proportion(t_map map)
+void	set_z_limits(t_map *map)
 {
 	int	y;
 	int	x;
-	int	highest_h;
-	int	lowest_h;
 	int	vol;
 
-	highest_h = map.columns;
-	lowest_h = -map.rows;
+	map->highest_z = map->columns;
+	map->lowest_z = -map->rows;
 	vol = 0;
 	y = -1;
-	while (++y < map.rows)
+	while (++y < map->rows)
 	{
 		x = 0;
-		while (x < map.columns)
+		while (x < map->columns)
 		{
-			vol = (map.z[y][x] * 3) + x - y;
-			if (vol > highest_h)
-				highest_h = vol;
-			if (vol < lowest_h)
-				lowest_h = vol;
+			vol = (map->z[y][x] * 3) + x - y;
+			if (vol > map->highest_z)
+				map->highest_z = vol;
+			if (vol < map->lowest_z)
+				map->lowest_z = vol;
 			x++;
 		}
 		vol = -y;
 	}
-	return (highest_h - lowest_h);
 }
 
 double	get_edge_width(double edge_size, int degrees)
@@ -59,7 +56,6 @@ e   |               .
 h   |_|____________________(___. 30
    90         edge_w
 */
-
 t_edge	*set_edge(t_map map)
 {
 	t_edge	*edge;
@@ -67,18 +63,18 @@ t_edge	*set_edge(t_map map)
 	double	map_width;
 	double	map_height;
 
-	height_len = get_height_proportion(map);
+	height_len = map.highest_z - map.lowest_z;
 	edge = (t_edge *)malloc(sizeof(t_edge));
 	if (!edge)
 		return (NULL);
-	edge->height = WIN_HEIGHT / height_len;
+	edge->height = (WIN_HEIGHT - 50.0) / height_len;
 	edge->size = edge->height * 3;
 	edge->width = get_edge_width(edge->height * 2, 30.0);
-	map_width = (map.columns + map.rows) * edge->width;
-	if (map_width > WIN_WIDTH)
+	map_width = ((map.columns + map.rows) * edge->width);
+	if (map_width > (WIN_WIDTH - 50.0))
 	{
-		map_height = (WIN_HEIGHT * WIN_WIDTH) / map_width;
-		map_width = WIN_WIDTH;
+		map_height = (((WIN_HEIGHT - 50.0) * (WIN_WIDTH - 50.0)) / map_width);
+		map_width = WIN_WIDTH - 50.0;
 		edge->height = map_height / height_len;
 		edge->size = edge->height * 3;
 		edge->width = get_edge_width(edge->height * 2, 30.0);

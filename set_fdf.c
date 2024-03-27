@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 18:54:25 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/27 19:04:40 by jgils            ###   ########.fr       */
+/*   Created: 2024/03/27 20:42:55 by jgils             #+#    #+#             */
+/*   Updated: 2024/03/27 20:50:50 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ void	set_isometric(t_map map, t_edge edge, t_dot **dots)
 	double	map_width;
 
 	map_width = (map.columns + map.rows - 2) * edge.width;
-	dots[0][0].x = (WIN_WIDTH - map_width) / 2;
-	dots[0][0].y = WIN_HEIGHT - (((map.rows - 1) * edge.height) + 1);
+	dots[0][0].x = ((WIN_WIDTH - map_width) / 2);
+	dots[0][0].y = WIN_HEIGHT - (((absolute(map.lowest_z)) * edge.height) + 25.0);
 	col = 1;
 	row = -1;
 	while (++row < map.rows)

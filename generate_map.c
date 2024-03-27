@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 18:53:06 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/27 18:53:09 by jgils            ###   ########.fr       */
+/*   Updated: 2024/03/27 19:26:49 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,5 +119,6 @@ t_map	*generate_map(char *file)
 		return (NULL);
 	}
 	close(fd);
+	set_z_limits(map);
 	return (map);
 }
