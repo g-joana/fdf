@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fdf.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/27 18:53:44 by jgils             #+#    #+#             */
+/*   Updated: 2024/03/27 18:53:44 by jgils            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 int	validate(char *file)
@@ -45,7 +57,7 @@ int	main(int argc, char **argv)
 	fdf = set_fdf(*map);
 	free_z(map->rows, map->z);
 	free(map);
- 	render_fdf(&fdf->img, *fdf);
+	render_fdf(&fdf->img, *fdf);
 	mlx_put_image_to_window(fdf->mlx, fdf->mlx_win, fdf->img.img, 0, 0);
 	mlx_loop(fdf->mlx);
 	return (0);

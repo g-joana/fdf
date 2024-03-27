@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render_fdf.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/27 18:54:16 by jgils             #+#    #+#             */
+/*   Updated: 2024/03/27 18:54:17 by jgils            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -35,7 +47,7 @@ double	get_steps(double distance1, double distance2)
 
 int	line(double dist, double start, double end, char axis)
 {
-	if ((start < 0) || (axis == 'x' && start > WIN_WIDTH) || (axis == 'y'
+	if ((axis == 'x' && start > WIN_WIDTH) || (axis == 'y'
 			&& start > WIN_HEIGHT))
 		return (1);
 	if (dist < 0)

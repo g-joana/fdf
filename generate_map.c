@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   generate_map.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/27 18:53:06 by jgils             #+#    #+#             */
+/*   Updated: 2024/03/27 18:53:09 by jgils            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft/libft.h"
 #include "fdf.h"
 
@@ -6,7 +18,8 @@ void	free_split(char **split)
 	int	i;
 
 	i = 0;
-	while (split[i]) {
+	while (split[i])
+	{
 		free(split[i]);
 		i++;
 	}
@@ -59,7 +72,7 @@ int	*array_atoi(char **split, int size)
 
 int	fill_map_rows(t_map *map, int fd)
 {
-	int	count;
+	int		count;
 	char	*line;
 
 	count = 0;
@@ -82,10 +95,10 @@ int	fill_map_rows(t_map *map, int fd)
 
 t_map	*generate_map(char *file)
 {
+	int		rows;
+	int		fd;
 	char	*line;
 	t_map	*map;
-	int	rows;
-	int	fd;
 
 	fd = open(file, O_RDONLY);
 	map = malloc_map(file);
@@ -93,7 +106,7 @@ t_map	*generate_map(char *file)
 		return (NULL);
 	rows = fill_map_rows(map, fd);
 	if (rows > 0)
-	{	
+	{
 		line = get_next_line(fd);
 		while (line)
 		{
