@@ -11,8 +11,8 @@ int	get_height_proportion(t_map map)
 	highest_h = map.columns;
 	lowest_h = -map.rows;
 	vol = 0;
-	y = 0;
-	while (y < map.rows)
+	y = -1;
+	while (++y < map.rows)
 	{
 		x = 0;
 		while (x < map.columns)
@@ -24,7 +24,6 @@ int	get_height_proportion(t_map map)
 				lowest_h = vol;
 			x++;
 		}
-		y++;
 		vol = -y;
 	}
 	return (highest_h - lowest_h);
@@ -35,7 +34,6 @@ double	get_edge_width(double edge_size, int degrees)
 	double	edge_width;
 
 	edge_width = edge_size * cos(degrees * (M_PI / 180.0));
-
 	return (edge_width);
 }
 
@@ -48,12 +46,12 @@ e   |               .
 -   |_                    .
 h   |_|____________________(___. 30
    90         edge_w
-
 */
+
 t_edge	*set_edge(t_map map)
 {
-	t_edge *edge;
-	int	height_len;
+	t_edge	*edge;
+	int		height_len;
 	double	map_width;
 	double	map_height;
 

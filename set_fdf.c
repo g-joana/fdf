@@ -1,6 +1,6 @@
 #include "fdf.h"
 
-void 	set_dots_volume(t_fdf *fdf, t_map map, double edge_size)
+void	set_z(t_dot **dots, t_map map, double edge_size)
 {
 	int	col;
 	int	row;
@@ -12,7 +12,7 @@ void 	set_dots_volume(t_fdf *fdf, t_map map, double edge_size)
 		col = 0;
 		while (col < map.columns)
 		{
-			fdf->dots[row][col].y -= map.z[row][col] * edge_size;
+			dots[row][col].y -= map.z[row][col] * edge_size;
 			col++;
 		}
 		row++;
@@ -20,10 +20,9 @@ void 	set_dots_volume(t_fdf *fdf, t_map map, double edge_size)
 	return ;
 }
 
-
 t_dot	**malloc_dots(t_map map)
 {
-	int	count;
+	int		count;
 	t_dot	**dots;
 
 	count = 0;
@@ -45,28 +44,24 @@ t_dot	**malloc_dots(t_map map)
 	return (dots);
 }
 
-t_dot	**set_dots(t_map map, t_edge edge)
+void	set_isometric(t_map map, t_edge edge, t_dot **dots)
 {
-	int	row;
-	int	col;
-	t_dot	**dots;
+	int		row;
+	int		col;
+	double	map_width;
 
-	row = 0;
-	col = 0;
-	dots = malloc_dots(map);
-	if (!dots)
-		return (NULL);
-	dots[row][col].x = (WIN_WIDTH - ((map.columns + map.rows - 2) * edge.width)) / 2;
-	dots[row][col].y = WIN_HEIGHT - ((map.rows - 1) * edge.height);
-	col++;
-	while (row < map.rows)
+	map_width = (map.columns + map.rows - 2) * edge.width;
+	dots[0][0].x = (WIN_WIDTH - map_width) / 2;
+	dots[0][0].y = WIN_HEIGHT - ((map.rows - 1) * edge.height);
+	col = 1;
+	row = -1;
+	while (++row < map.rows)
 	{
 		if (row > 0)
 		{
-			col = 0;
-			dots[row][col].x = dots[row - 1][col].x + edge.width;
-			dots[row][col].y = dots[row - 1][col].y + edge.height;
-			col++;
+			dots[row][0].x = dots[row - 1][0].x + edge.width;
+			dots[row][0].y = dots[row - 1][0].y + edge.height;
+			col = 1;
 		}
 		while (col < map.columns)
 		{
@@ -74,8 +69,18 @@ t_dot	**set_dots(t_map map, t_edge edge)
 			dots[row][col].y = dots[row][col - 1].y - edge.height;
 			col++;
 		}
-		row++;
 	}
+	set_z(dots, map, edge.size);
+}
+
+t_dot	**set_dots(t_map map, t_edge edge)
+{
+	t_dot	**dots;
+
+	dots = malloc_dots(map);
+	if (!dots)
+		return (NULL);
+	set_isometric(map, edge, dots);
 	return (dots);
 }
 
@@ -87,19 +92,15 @@ t_fdf	*set_fdf(t_map map)
 	fdf = (t_fdf *)malloc(sizeof(t_fdf));
 	if (!fdf)
 		return (NULL);
-	fdf->mlx = mlx_init();
-	fdf->mlx_win = mlx_new_window(fdf->mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
-	fdf->img.img = mlx_new_image(fdf->mlx, WIN_WIDTH, WIN_HEIGHT);
-	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bits_per_pixel, &fdf->img.line_length, &fdf->img.endian);
 	edge = set_edge(map);
 	if (!edge)
 		return (NULL);
+	fdf->rows = map.rows;
+	fdf->columns = map.columns;
 	fdf->dots = set_dots(map, *edge);
 	if (!fdf->dots)
 		return (NULL);
-	fdf->rows = map.rows;
-	fdf->columns = map.columns;
-	set_dots_volume(fdf, map, edge->size);
 	free(edge);
+	start_mlx(fdf);
 	return (fdf);
 }

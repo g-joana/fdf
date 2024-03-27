@@ -2,8 +2,8 @@
 
 int	get_gnl_len(char *file)
 {
-	int	fd;
-	int	len;
+	int		fd;
+	int		len;
 	char	*line;
 
 	len = 0;
@@ -33,9 +33,10 @@ int	get_row_len(char *line)
 		if (line[len] == '\0' || line[len] == '\n')
 			break ;
 		while (line[len] != ' ')
-		{	
-			if (line[len + 1] == '\0' || line[len + 1] == '\n' || line[len + 1] == ' ')
-			{	
+		{
+			if (line[len + 1] == '\0' || line[len + 1] == '\n' || line[len
+					+ 1] == ' ')
+			{
 				len++;
 				number++;
 				break ;

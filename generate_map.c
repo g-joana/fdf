@@ -71,13 +71,13 @@ int	fill_map_rows(t_map *map, int fd)
 		map->z[count] = array_atoi(ft_split(line, ' '), map->columns);
 		free(line);
 		if (map->z[count] == 0)
-			return (0);
+			return (count);
 		count++;
 	}
 	line = get_next_line(fd);
 	if (line)
 		free(line);
-	return (1);
+	return (-1);
 }
 
 t_map	*generate_map(char *file)
@@ -92,8 +92,9 @@ t_map	*generate_map(char *file)
 	if (!map)
 		return (NULL);
 	rows = fill_map_rows(map, fd);
-	if (!rows)
-	{
+	if (rows > 0)
+	{	
+		line = get_next_line(fd);
 		while (line)
 		{
 			free(line);

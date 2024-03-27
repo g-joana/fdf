@@ -13,57 +13,15 @@ int	validate(char *file)
 	return (1);
 }
 
-void	free_z(int rows, int **z)
+void	start_mlx(t_fdf *fdf)
 {
-	int	row;
-
-	row = 0;
-	while (row < rows)
-	{
-		free(z[row]);
-		row++;
-	}
-	free(z);
-}
-
-void	free_dots(int rows, t_dot **dots)
-{
-	int	row;
-
-	row = 0;
-	while (row < rows)
-	{
-		free(dots[row]);
-		row++;
-	}
-	free(dots);
-}
-
-int	key_hook(int key, t_fdf *fdf)
-{
-	if (key == 65307)
-	{
-		mlx_destroy_image(fdf->mlx, fdf->img.img);
-		mlx_destroy_window(fdf->mlx, fdf->mlx_win);
-		mlx_destroy_display(fdf->mlx);
-		free_dots(fdf->rows, fdf->dots);
-		free(fdf->mlx);
-		free(fdf);
-		exit(1);
-	}
-	return (0);
-}
-
-int	mouse_hook(t_fdf *fdf)
-{
-	mlx_destroy_image(fdf->mlx, fdf->img.img);
-	mlx_destroy_window(fdf->mlx, fdf->mlx_win);
-	mlx_destroy_display(fdf->mlx);
-	free_dots(fdf->rows, fdf->dots);
-	free(fdf->mlx);
-	free(fdf);
-	exit(1);
-	return (0);
+	fdf->mlx = mlx_init();
+	fdf->mlx_win = mlx_new_window(fdf->mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
+	fdf->img.img = mlx_new_image(fdf->mlx, WIN_WIDTH, WIN_HEIGHT);
+	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bits_per_pixel,
+			&fdf->img.line_length, &fdf->img.endian);
+	mlx_key_hook(fdf->mlx_win, key_hook, fdf);
+	mlx_hook(fdf->mlx_win, 17, 1L << 17, mouse_hook, fdf);
 }
 
 int	main(int argc, char **argv)
@@ -77,7 +35,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	if (!validate(argv[1]))
-	{	
+	{
 		ft_putstr_fd("Invalid file. Exiting.", 2);
 		return (1);
 	}
@@ -85,12 +43,10 @@ int	main(int argc, char **argv)
 	if (map == NULL)
 		return (1);
 	fdf = set_fdf(*map);
-	//set ou init mlx
 	free_z(map->rows, map->z);
 	free(map);
-	mlx_key_hook(fdf->mlx_win, key_hook, fdf);
-	mlx_hook(fdf->mlx_win, 17, 1L<<17, mouse_hook, fdf);
-	render_fdf(&fdf->img, *fdf);
+ 	render_fdf(&fdf->img, *fdf);
 	mlx_put_image_to_window(fdf->mlx, fdf->mlx_win, fdf->img.img, 0, 0);
 	mlx_loop(fdf->mlx);
+	return (0);
 }
