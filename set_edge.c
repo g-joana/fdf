@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   set_edge.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 20:43:03 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/27 20:45:04 by jgils            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "fdf.h"
 
 void	set_z_limits(t_map *map)
@@ -18,8 +6,8 @@ void	set_z_limits(t_map *map)
 	int	x;
 	int	vol;
 
-	map->highest_z = map->columns;
-	map->lowest_z = -map->rows;
+	map->highest_z = map->columns - 1;
+	map->lowest_z = -(map->rows - 1);
 	vol = 0;
 	y = -1;
 	while (++y < map->rows)
