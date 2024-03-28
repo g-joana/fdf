@@ -6,12 +6,12 @@
 #    By: jgils <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/28 00:04:41 by jgils             #+#    #+#              #
-#    Updated: 2024/03/05 03:38:22 by jgils            ###   ########.fr        #
+#    Updated: 2024/03/28 16:04:22 by jgils            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=fdf
-SRC=*.c
+SRC=fdf.c generate_map.c get_map_len.c set_edge.c set_fdf.c utils.c render_fdf.c destroy.c
 LIBFT=libft/libft.a
 MINILIBX=minilibx-linux/libmlx_Linux.a
 CC=cc
