@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 20:53:58 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/27 20:53:58 by jgils            ###   ########.fr       */
+/*   Updated: 2024/03/28 15:42:45 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,4 @@ int	key_hook(int key, t_fdf *fdf);
 int	mouse_hook(t_fdf *fdf);
 void	start_mlx(t_fdf *fdf);
 // utils.c
-int	absolute(int value);
+int	abs(int value);

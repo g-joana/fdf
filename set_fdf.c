@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_fdf.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/28 15:44:07 by jgils             #+#    #+#             */
+/*   Updated: 2024/03/28 15:44:07 by jgils            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 void	set_z(t_dot **dots, t_map map, double edge_size)
@@ -52,7 +64,7 @@ void	set_isometric(t_map map, t_edge edge, t_dot **dots)
 
 	map_width = (map.columns + map.rows - 2) * edge.width;
 	dots[0][0].x = ((WIN_WIDTH - map_width) / 2);
-	dots[0][0].y = WIN_HEIGHT - (((absolute(map.lowest_z)) * edge.height) + 25.0);
+	dots[0][0].y = WIN_HEIGHT - (((abs(map.lowest_z)) * edge.height) + 25.0);
 	col = 1;
 	row = -1;
 	while (++row < map.rows)

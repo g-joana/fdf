@@ -6,13 +6,13 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 20:53:52 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/27 20:53:52 by jgils            ###   ########.fr       */
+/*   Updated: 2024/03/28 15:42:20 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	absolute(int value)
+int	abs(int value)
 {
 	if (value < 0)
 		return (-value);
