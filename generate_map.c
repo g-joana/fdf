@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 18:53:06 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/27 19:26:49 by jgils            ###   ########.fr       */
+/*   Updated: 2024/03/28 12:00:23 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int	fill_map_rows(t_map *map, int fd)
 	line = get_next_line(fd);
 	if (line)
 		free(line);
+	set_z_limits(map);
 	return (-1);
 }
 
@@ -105,7 +106,7 @@ t_map	*generate_map(char *file)
 	if (!map)
 		return (NULL);
 	rows = fill_map_rows(map, fd);
-	if (rows > 0)
+	if (rows >= 0)
 	{
 		line = get_next_line(fd);
 		while (line)
@@ -119,6 +120,5 @@ t_map	*generate_map(char *file)
 		return (NULL);
 	}
 	close(fd);
-	set_z_limits(map);
 	return (map);
 }
