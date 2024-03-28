@@ -6,7 +6,7 @@
 #    By: jgils <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/28 00:04:41 by jgils             #+#    #+#              #
-#    Updated: 2024/03/28 16:04:22 by jgils            ###   ########.fr        #
+#    Updated: 2024/03/28 16:55:14 by jgils            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,9 @@ all: $(NAME)
 
 $(NAME): $(SRC) $(LIBFT) $(MINILIBX)
 	$(CC) $(FLAGS) $(SRC) $(LIBFT) $(MINILIBX) $(INCLUDES) -o $(NAME)
+
+.c.o: $(SRC)
+	$(CC) $(FLAGS) -c $< -o $@
 
 $(LIBFT):
 	make -C libft/
