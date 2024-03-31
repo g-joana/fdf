@@ -34,10 +34,10 @@ $(MINILIBX):
 	make -C minilibx-linux/
 
 clean:
-	rm -rf $(OBJ)
+	rm -f $(OBJ)
 	make clean -C libft/
 
-fclean:
+fclean: clean
 	rm -f $(NAME)
 	make fclean -C libft/
 
