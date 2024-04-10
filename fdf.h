@@ -10,22 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
-#include "minilibx-linux/mlx.h"
-#include "minilibx-linux/mlx_int.h"
-#include <math.h>
+#ifndef FDF_H
+# define FDF_H
+# include "libft/libft.h"
+# include "minilibx-linux/mlx.h"
+# include "minilibx-linux/mlx_int.h"
+# include <math.h>
 
-#ifndef EDGE_SIZE
-# define EDGE_SIZE 42
-#endif
+# ifndef EDGE_SIZE
+#  define EDGE_SIZE 42
+# endif
 
-#ifndef WIN_WIDTH
-# define WIN_WIDTH 900.0
-#endif
+# ifndef WIN_WIDTH
+#  define WIN_WIDTH 900.0
+# endif
 
-#ifndef WIN_HEIGHT
-# define WIN_HEIGHT 600.0
-#endif
+# ifndef WIN_HEIGHT
+#  define WIN_HEIGHT 600.0
+# endif
 
 typedef struct s_data
 {
@@ -70,39 +72,21 @@ typedef struct s_fdf
 	t_map	*map;
 }			t_fdf;
 
-// fdf.c
 int			validate(char *file);
-int			key_hook(int key, t_fdf *fdf);
 void		free_z(int rows, int **z);
 void		free_dots(int rows, t_dot **dots);
-// get_map_len.c
 int			get_gnl_len(char *file);
 int			get_row_len(char *line);
 int			get_array_len(char **split);
-// generate_map.c
-void		free_split(char **split);
-t_map		*malloc_map(char *file);
-int			fill_map_rows(t_map *map, int fd);
-int			*array_atoi(char **tab, int size);
 t_map		*generate_map(char *file);
-// set_edge.c
-double	get_edge_width(double edge_size, int degrees);
-void		set_z_limits(t_map *map);
+double		get_edge_width(double edge_size, int degrees);
 t_edge		*set_edge(t_map map);
-// set_fdf.c
-void		set_z(t_dot **dots, t_map map, double edge_size);
-t_dot		**malloc_dots(t_map map);
-t_dot		**set_dots(t_map map, t_edge edge);
+void		set_z_limits(t_map *map);
 t_fdf		*set_fdf(t_map map);
-// render_fdf.c
-void		my_mlx_pixel_put(t_data *data, int x, int y, int color);
-double		get_steps(double distance1, double distance2);
-int			line(double dist, double start, double end, char axis);
-void		render_line(t_data *img, t_dot start, t_dot end);
 void		render_fdf(t_data *img, t_fdf fdf);
-// start_mlx.c
-int	key_hook(int key, t_fdf *fdf);
-int	mouse_hook(t_fdf *fdf);
-void	start_mlx(t_fdf *fdf);
-// utils.c
-int	abs(int value);
+int			key_hook(int key, t_fdf *fdf);
+int			mouse_hook(t_fdf *fdf);
+void		start_mlx(t_fdf *fdf);
+int			abs(int value);
+
+#endif
