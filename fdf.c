@@ -43,12 +43,12 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		ft_putstr_fd("Invalid input", 2);
+		ft_putstr_fd("Invalid input.\n", 2);
 		return (1);
 	}
 	if (!validate(argv[1]))
 	{
-		ft_putstr_fd("Invalid file. Exiting.", 2);
+		ft_putstr_fd("Invalid file. Exiting.\n", 2);
 		return (1);
 	}
 	map = generate_map(argv[1]);
