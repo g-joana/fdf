@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 18:53:06 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/28 12:00:23 by jgils            ###   ########.fr       */
+/*   Updated: 2024/04/17 17:44:48 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ t_map	*malloc_map(char *file)
 	if (!map)
 		return (NULL);
 	map->rows = get_gnl_len(file);
+	if (map->rows == 0)
+	{
+		free(map);
+		ft_putstr_fd("Empty map.\n", 2);
+		return (NULL);
+	}
 	map->z = (int **)malloc(map->rows * sizeof(int *));
 	if (!map->z)
 	{
