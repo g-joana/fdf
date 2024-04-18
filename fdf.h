@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 20:53:58 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/28 15:42:45 by jgils            ###   ########.fr       */
+/*   Updated: 2024/04/18 14:50:21 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_fdf
 int			validate(char *file);
 void		free_z(int rows, int **z);
 void		free_dots(int rows, t_dot **dots);
+void		free_split(char **split);
 int			get_gnl_len(char *file);
 int			get_row_len(char *line);
 int			get_array_len(char **split);
@@ -88,5 +89,7 @@ int			key_hook(int key, t_fdf *fdf);
 int			mouse_hook(t_fdf *fdf);
 void		start_mlx(t_fdf *fdf);
 int			abs(int value);
+t_dot		**malloc_dots(t_map map);
+t_map		*malloc_map(char *file);
 
 #endif

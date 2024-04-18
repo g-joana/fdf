@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 18:53:44 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/28 16:47:46 by jgils            ###   ########.fr       */
+/*   Updated: 2024/04/18 15:31:53 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,6 @@ int	validate(char *file)
 		return (0);
 	close(fd);
 	return (1);
-}
-
-void	start_mlx(t_fdf *fdf)
-{
-	fdf->mlx = mlx_init();
-	fdf->mlx_win = mlx_new_window(fdf->mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
-	fdf->img.img = mlx_new_image(fdf->mlx, WIN_WIDTH, WIN_HEIGHT);
-	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bits_per_pixel,
-			&fdf->img.line_length, &fdf->img.endian);
-	mlx_key_hook(fdf->mlx_win, key_hook, fdf);
-	mlx_hook(fdf->mlx_win, 17, 1L << 17, mouse_hook, fdf);
 }
 
 int	main(int argc, char **argv)

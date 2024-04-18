@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 18:53:22 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/27 18:53:23 by jgils            ###   ########.fr       */
+/*   Updated: 2024/04/18 14:47:24 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,19 @@ void	free_dots(int rows, t_dot **dots)
 		row++;
 	}
 	free(dots);
+}
+
+void	free_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
 }
 
 int	key_hook(int key, t_fdf *fdf)

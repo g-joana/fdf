@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 18:54:16 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/27 18:54:17 by jgils            ###   ########.fr       */
+/*   Updated: 2024/04/18 15:32:46 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dest;
 
-	dest = data->addr + (y * data->line_length + x * (data->bits_per_pixel
-				/ 8));
+	dest = data->addr + (y * data->line_length + x
+			* (data->bits_per_pixel / 8));
 	*(unsigned int *)dest = color;
 }
 

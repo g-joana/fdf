@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 15:44:07 by jgils             #+#    #+#             */
-/*   Updated: 2024/03/28 15:44:07 by jgils            ###   ########.fr       */
+/*   Updated: 2024/04/18 14:48:12 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,30 +30,6 @@ void	set_z(t_dot **dots, t_map map, double edge_size)
 		row++;
 	}
 	return ;
-}
-
-t_dot	**malloc_dots(t_map map)
-{
-	int		count;
-	t_dot	**dots;
-
-	count = 0;
-	dots = (t_dot **)malloc(map.rows * sizeof(t_dot *));
-	if (!dots)
-		return (NULL);
-	while (count < map.rows)
-	{
-		dots[count] = (t_dot *)malloc(map.columns * sizeof(t_dot));
-		if (!dots[count])
-		{
-			while (count-- >= 0)
-				free(dots[count]);
-			free(dots);
-			return (NULL);
-		}
-		count++;
-	}
-	return (dots);
 }
 
 void	set_isometric(t_map map, t_edge edge, t_dot **dots)

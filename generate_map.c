@@ -6,48 +6,12 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 18:53:06 by jgils             #+#    #+#             */
-/*   Updated: 2024/04/17 17:44:48 by jgils            ###   ########.fr       */
+/*   Updated: 2024/04/18 14:49:56 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "fdf.h"
-
-void	free_split(char **split)
-{
-	int	i;
-
-	i = 0;
-	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
-}
-
-t_map	*malloc_map(char *file)
-{
-	t_map	*map;
-
-	map = (t_map *)malloc(1 * sizeof(t_map));
-	if (!map)
-		return (NULL);
-	map->rows = get_gnl_len(file);
-	if (map->rows == 0)
-	{
-		free(map);
-		ft_putstr_fd("Empty map.\n", 2);
-		return (NULL);
-	}
-	map->z = (int **)malloc(map->rows * sizeof(int *));
-	if (!map->z)
-	{
-		free(map);
-		return (NULL);
-	}
-	return (map);
-}
 
 int	*array_atoi(char **split, int size)
 {

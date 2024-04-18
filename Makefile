@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME=fdf
-SRC=fdf.c generate_map.c get_map_len.c set_edge.c set_fdf.c utils.c render_fdf.c destroy.c
+SRC=fdf.c fdf_utils.c generate_map.c generate_map_utils.c set_fdf_edge.c set_fdf.c render_fdf.c destroy.c
 OBJ=$(SRC:.c=.o)
 LIBFT=libft/libft.a
 MINILIBX=minilibx-linux/libmlx_Linux.a
