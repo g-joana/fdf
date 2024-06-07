@@ -16,7 +16,7 @@ A partir de um arquivo que contém uma matriz de pontos com coordenadas (x, y, z
 1. Cole esse comando no terminal para clonar e compilar:
    
   ``` bash
-  git clone git@github.com:jou-code/fdf.git && cd fdf && make
+  git clone --recursive git@github.com:g-joana/fdf.git && cd fdf && make
   ```
 
 2. Para executar digite o _binário_ + _mapa_. Exemplo:
